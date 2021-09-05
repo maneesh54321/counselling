@@ -1,13 +1,11 @@
 package com.vedantu.counselling.data.controller;
 
 import com.vedantu.counselling.data.model.*;
-import com.vedantu.counselling.data.response.CityDataResponse;
 import com.vedantu.counselling.data.response.RankingScreenMetadata;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.Duration;
 import java.util.*;
 
 @RestController

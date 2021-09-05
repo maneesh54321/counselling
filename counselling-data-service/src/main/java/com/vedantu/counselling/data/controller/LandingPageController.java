@@ -1,9 +1,8 @@
 package com.vedantu.counselling.data.controller;
 
-import com.jogamp.common.util.ArrayHashMap;
 import com.vedantu.counselling.data.model.City;
-import com.vedantu.counselling.data.response.CityDataResponse;
 import com.vedantu.counselling.data.model.Response;
+import com.vedantu.counselling.data.response.CityDataResponse;
 import com.vedantu.counselling.data.response.LandingPageResponse;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;

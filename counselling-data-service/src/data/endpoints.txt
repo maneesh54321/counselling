@@ -1,0 +1,150 @@
+Endpoint 1: Get Location
+-------------------------
+Request	: /counsellingapp/get-all-city
+Parameter : None
+Type	: Get
+Response:
+
+{
+	status: "Success",
+	data: { 
+		defaultCity
+		{
+			"cityId":"1",
+			"cityFullName":"Bengaluru, Karnataka, India"
+			"cityDisplayName":"Bengaluru"
+		},
+		allCity	
+			[
+				{"cityId":"1",
+				"cityFullName":"Bengaluru, Karnataka, India"
+				"cityDisplayName":"Bengaluru"
+				},
+				{"cityId":"1",
+				"cityFullName":"Bengaluru, Karnataka, India"
+				"cityDisplayName":"Bengaluru"
+				}
+			]
+	}
+}
+
+
+Endpoint 2: Access Update
+-------------------------
+Request	: /counsellingapp/access-update
+Parameter : IP Address
+
+{
+	ipAddress: "10.121.223.21"
+}
+Type	: Post
+Response:
+
+{
+	status: "Success",
+	data: { 
+		message: "Success"
+	}
+}
+
+
+Endpoint 3: Landing Page
+-------------------------
+Request	: /counsellingapp/landing-page-info
+Parameter : None
+Type	: Get
+Response:
+{
+	status: "Success",
+	data: { 
+		"description": "Description to be provided by Vikash Sir",
+		"ytLink": "http://youtube.com",
+		"disclaimer": "Disclaimer to be provided by Vikash Sir",
+		"keyWordMap"	
+			[
+				{"Keyword":"ECE",
+				"Description":"Electronics and communication"
+				},
+				{"Keyword":"CE",
+				"Description":"Computer Science"
+				}
+			]	
+}
+
+
+Endpoint 4: Rank Screen
+-------------------------
+Request	: /counsellingapp/rank-screen-metadata
+Parameter : None
+Type	: Get
+Response:
+{
+	status: "Success",
+	data: { 
+		"category": "[{1, OPEN},{2, SC} ]",
+		"gender": "[{1, OPEN},{2, SC} ]",
+		"quota": "[{1, OPEN},{2, SC} ]",
+		"collegeTags": "[{1, OPEN},{2, SC} ]",
+		.
+		.
+		{
+		"RankType":"advance",
+		"maxCR":"4234"
+		}
+		{
+		"RankType":"Main",
+		"maxCR":"4234"
+		}
+		{
+		"RankType":"XYZ",
+		"maxCR":"4234"
+		}
+		{
+		"MaxDistance":"3000",
+		}
+
+}
+
+Endpoint 5: Rank Screen - Actual Data endoint
+-------------------------
+Request	: /counsellingapp/rank-screen-get-data
+Parameter : 
+
+{
+	"category":"Open",
+	"gender" : "Girls Only"
+	"quota" : "Open"
+	"collegeTag" : "[1, 2]",
+	"institute" : "[1, 2]",
+	"branchTag" : "[1, 2]",
+	"duration" : "[4,5]",
+	"year" : "[2019,2020]"
+	"closingRank"{
+		{
+		"RankType":"advance",
+		"CR":"4234"
+		}
+		{
+		"RankType":"Main",
+		"CR":"4234"
+		}
+		{
+		"RankType":"XYZ",
+		"CR":"4234"
+		}
+	}
+	"city":"1" 
+	"distance" : "2323",
+	"pageNumber" : "1"
+	"pageSize" : "100"
+}
+
+Type	: Post
+Response:
+{
+	status: "Success",
+	data: { 
+		"totalRecord" : "324342"
+		Actual Data Array
+		
+}

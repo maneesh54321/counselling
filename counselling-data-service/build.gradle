@@ -21,8 +21,6 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-//	implementation 'io.springfox:springfox-boot-starter:3.0.0'
-//	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
 	implementation 'org.springdoc:springdoc-openapi-ui:1.5.10'
 	compileOnly 'org.projectlombok:lombok'
 //	runtimeOnly 'org.postgresql:postgresql'
@@ -33,44 +31,4 @@ dependencies {
 
 test {
 	useJUnitPlatform()
-}
-
-def webappDir = "$projectDir/src/main/webapp/vedantu-counselling"
-
-sourceSets {
-	main {
-		resources {
-			srcDirs = ["$projectDir/src/main/resources"]
-		}
-	}
-}
-
-processResources {
-	dependsOn "buildAngular"
-}
-
-task buildAngular(type:Exec) {
-	// installAngular should be run prior to this task
-	dependsOn "installAngular"
-	workingDir "$webappDir"
-	inputs.dir "$webappDir"
-	// Add task to the standard build group
-	group = BasePlugin.BUILD_GROUP
-	// ng doesn't exist as a file in windows -> ng.cmd
-	if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
-		commandLine "ng.cmd", "build"
-	} else {
-		commandLine "ng", "build"
-	}
-}
-
-task installAngular(type:Exec) {
-	workingDir "$webappDir"
-	inputs.dir "$webappDir"
-	group = BasePlugin.BUILD_GROUP
-	if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
-		commandLine "npm.cmd", "install"
-	} else {
-		commandLine "npm", "install"
-	}
 }

@@ -1,6 +1,7 @@
 spring:
   datasource:
     platform: postgres
+    type: org.apache.tomcat.jdbc.pool.DataSource
     url: jdbc:postgresql://localhost:5432/postgres
     username: "postgres"
     password: "admin"

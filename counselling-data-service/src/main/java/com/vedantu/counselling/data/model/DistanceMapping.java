@@ -13,7 +13,7 @@ import lombok.*;
 public class DistanceMapping {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "distance_mapping_id_generator")
-    @SequenceGenerator(name="distance_mapping_id_generator", sequenceName = "distance_mapping_id_seq", allocationSize = 5)
+    @SequenceGenerator(name="distance_mapping_id_generator", sequenceName = "distance_mapping_id_seq", allocationSize = 1)
     private int distanceMappingId;
 
     @OneToOne
@@ -24,5 +24,5 @@ public class DistanceMapping {
     @JoinColumn(name = "college_id")
     private College college;
 
-    private int distance;
+    private Integer distance;
 }

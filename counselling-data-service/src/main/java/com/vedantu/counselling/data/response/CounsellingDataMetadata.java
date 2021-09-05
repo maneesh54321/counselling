@@ -1,10 +1,7 @@
 package com.vedantu.counselling.data.response;
 
 import com.vedantu.counselling.data.model.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +10,8 @@ import java.util.Map;
 @Getter
 @Setter
 @ToString
-public class RankingScreenMetadata {
+@AllArgsConstructor
+public class CounsellingDataMetadata {
     private List<Category> categories;
     private List<Gender> genders;
     private List<Quota> quotas;

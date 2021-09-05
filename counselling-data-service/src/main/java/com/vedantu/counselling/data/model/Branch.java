@@ -20,7 +20,7 @@ public class Branch {
     @Column(nullable = false)
     private String branchName;
 
-    private int duration;
+    private Integer duration;
 
     @OneToOne(cascade=CascadeType.PERSIST)
     @JoinColumn(name = "branch_tag_id")

@@ -1,8 +1,10 @@
 package com.vedantu.counselling.data.controller;
 
 import com.vedantu.counselling.data.model.*;
-import com.vedantu.counselling.data.response.RankingScreenMetadata;
+import com.vedantu.counselling.data.response.CounsellingDataMetadata;
 import com.vedantu.counselling.data.response.Response;
+import com.vedantu.counselling.data.service.CounsellingDataService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,13 +17,20 @@ import java.util.*;
 @CrossOrigin
 public class RankingScreenController {
 
-    @GetMapping(value = "/counsellingapp/rank-screen-metadata", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response<RankingScreenMetadata> getRankingScreenMetadata() {
-        return new Response<>("Success", getDummyMetaData());
+    private final CounsellingDataService counsellingDataService;
+
+    @Autowired
+    public RankingScreenController(CounsellingDataService counsellingDataService) {
+        this.counsellingDataService = counsellingDataService;
     }
 
-    private RankingScreenMetadata getDummyMetaData() {
-        RankingScreenMetadata rankingScreenMetadata = new RankingScreenMetadata();
+    @GetMapping(value = "/counsellingapp/rank-screen-metadata", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response<CounsellingDataMetadata> getRankingScreenMetadata() {
+        return new Response<>("Success", counsellingDataService.getCounsellingDataMetadata());
+    }
+
+    private CounsellingDataMetadata getDummyMetaData() {
+        CounsellingDataMetadata counsellingDataMetadata = new CounsellingDataMetadata();
         List<Category> categories = new LinkedList<>();
         categories.add(new Category(1,"OPEN"));
         categories.add(new Category(2,"OBC-NCL"));
@@ -33,12 +42,12 @@ public class RankingScreenController {
         categories.add(new Category(8,"ST (PwD)"));
         categories.add(new Category(9,"EWS"));
         categories.add(new Category(10,"EWS (PwD)"));
-        rankingScreenMetadata.setCategories(categories);
+        counsellingDataMetadata.setCategories(categories);
 
         List<Gender> genders = new LinkedList<>();
         genders.add(new Gender(1, "Female-only (including Supernumerary)"));
         genders.add(new Gender(2, "Gender-Neutral"));
-        rankingScreenMetadata.setGenders(genders);
+        counsellingDataMetadata.setGenders(genders);
 
         List<Quota> quotas = new LinkedList<>();
         quotas.add(new Quota(1, "AI/OS"));
@@ -47,15 +56,15 @@ public class RankingScreenController {
         quotas.add(new Quota(4, "AP"));
         quotas.add(new Quota(5, "JK"));
         quotas.add(new Quota(6, "LA"));
-        rankingScreenMetadata.setQuotas(quotas);
+        counsellingDataMetadata.setQuotas(quotas);
 
         Map<RankType, Integer> maxRanks = new LinkedHashMap<>();
         maxRanks.put(new RankType(1, "Advance"), 10000);
         maxRanks.put(new RankType(2, "JEE-Main"), 10000);
         maxRanks.put(new RankType(3, "Arch"), 2500);
-        rankingScreenMetadata.setMaxRanks(maxRanks);
+        counsellingDataMetadata.setMaxRanks(maxRanks);
 
-        rankingScreenMetadata.setColleges(Arrays.asList(
+        counsellingDataMetadata.setColleges(Arrays.asList(
                 new College(1, "Indian Institute of Technology Bhubaneswar", new CollegeType(1,"IIT")),
                 new College(2, "Indian Institute of Technology Bombay", new CollegeType(1,"IIT")),
                 new College(3, "National Institute of Technology Raipur", new CollegeType(1,"IIT")),
@@ -168,7 +177,7 @@ public class RankingScreenController {
                 new College(110, "North Eastern Regional Institute of Science and Technology, Nirjuli-791109 (Itanagar),Arunachal Pradesh", new CollegeType(4,"GFTI"))
         ));
 
-        rankingScreenMetadata.setBranchTags(Arrays.asList(
+        counsellingDataMetadata.setBranchTags(Arrays.asList(
                 new BranchTag(1,"Civil"),
                 new BranchTag(2,"CSE"),
                 new BranchTag(3,"EEE"),
@@ -214,17 +223,17 @@ public class RankingScreenController {
                 new BranchTag(43,"AI"),
                 new BranchTag(44,"ME(Derivative)")));
 
-        rankingScreenMetadata.setDurations(Arrays.asList(4, 5));
+        counsellingDataMetadata.setDurations(Arrays.asList(4, 5));
 
-        rankingScreenMetadata.setYears(Arrays.asList(2018,2019,2020));
+        counsellingDataMetadata.setYears(Arrays.asList(2018,2019,2020));
 
-        rankingScreenMetadata.setCollegeTypes(Arrays.asList(
+        counsellingDataMetadata.setCollegeTypes(Arrays.asList(
                 new CollegeType(1, "IIT"),
                 new CollegeType(2, "IIIT"),
                 new CollegeType(3, "NIT"),
                 new CollegeType(4, "GFTI")));
 
-        rankingScreenMetadata.setMaxDistance(2900);
-        return rankingScreenMetadata;
+        counsellingDataMetadata.setMaxDistance(2900);
+        return counsellingDataMetadata;
     }
 }

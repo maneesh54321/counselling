@@ -1,10 +1,11 @@
 package com.vedantu.counselling.data.controller;
 
 import com.vedantu.counselling.data.model.City;
-import com.vedantu.counselling.data.model.Response;
+import com.vedantu.counselling.data.response.Response;
 import com.vedantu.counselling.data.response.CityDataResponse;
 import com.vedantu.counselling.data.response.LandingPageResponse;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin
 public class LandingPageController {
 
     @GetMapping(value = "/counsellingapp/get-all-city", produces = MediaType.APPLICATION_JSON_VALUE)

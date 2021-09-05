@@ -2,13 +2,17 @@ package com.vedantu.counselling.data.controller;
 
 import com.vedantu.counselling.data.model.*;
 import com.vedantu.counselling.data.response.RankingScreenMetadata;
+import com.vedantu.counselling.data.response.Response;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 
+
 @RestController
+@CrossOrigin
 public class RankingScreenController {
 
     @GetMapping(value = "/counsellingapp/rank-screen-metadata", produces = MediaType.APPLICATION_JSON_VALUE)

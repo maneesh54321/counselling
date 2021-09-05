@@ -1,4 +1,4 @@
-package com.vedantu.counselling.data.model;
+package com.vedantu.counselling.data.response;
 
 import lombok.*;
 

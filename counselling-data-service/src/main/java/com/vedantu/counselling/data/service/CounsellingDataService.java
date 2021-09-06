@@ -4,6 +4,7 @@ import com.vedantu.counselling.data.model.*;
 import com.vedantu.counselling.data.repository.*;
 import com.vedantu.counselling.data.response.CounsellingDataMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -43,6 +44,7 @@ public class CounsellingDataService {
         this.rankRepository = rankRepository;
     }
 
+    @Cacheable(value = {"counsellingDataMetadata"})
     public CounsellingDataMetadata getCounsellingDataMetadata() {
         List<Category> categories = categoryRepository.findAll();
         List<Gender> genders = genderRepository.findAll();
@@ -52,7 +54,8 @@ public class CounsellingDataService {
         List<BranchTag> branchTags = branchTagRepository.findAll();
         List<Integer> distinctDurations = branchrepository.findDistinctDurations();
         List<Integer> distinctYears = rankRepository.findDistinctYears();
-
+//        TODO: Add logic to fetch maxRanks by rank type
+//        TODO: Add maxDistance fetching logic
         return new CounsellingDataMetadata(
                 categories, genders, quotas, collegeTypes, colleges, branchTags,
                 distinctDurations, distinctYears, 3000, Collections.emptyMap()

@@ -35,17 +35,6 @@ public class RankingScreenController {
 
     @PostMapping(value = "/rank-screen-get-data", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response<CounsellingDataResponse> getCounsellingDataFor(@RequestBody CounsellingDataRequest counsellingDataRequest) {
-        return new Response<>(ResponseStatus.SUCCESS, getDummyData());
-    }
-
-
-
-    private CounsellingDataResponse getDummyData() {
-        List<CounsellingData> list = new LinkedList<>();
-        list.add(new CounsellingData(100, "IIIT Hyderabad", "IIIT", "IT", "SC", "Army", "Female-Only", 2020, new ThreeTuple<>(2, 1, 500)));
-        list.add(new CounsellingData(120, "IIT Mumbai", "IIT", "IT", "SC", "Army", "Female-Only", 2020, new ThreeTuple<>(1, 1, 500)));
-        list.add(new CounsellingData(130, "NIT Lucknow", "NIT", "IT", "SC", "Army", "Female-Only", 2020, new ThreeTuple<>(2, 1, 500)));
-        return new CounsellingDataResponse(130, list);
-
+        return new Response<>(ResponseStatus.SUCCESS, counsellingDataService.getCounsellingDataFor(counsellingDataRequest));
     }
 }

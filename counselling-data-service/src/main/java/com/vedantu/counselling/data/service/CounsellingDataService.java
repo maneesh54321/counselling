@@ -2,6 +2,9 @@ package com.vedantu.counselling.data.service;
 
 import com.vedantu.counselling.data.model.*;
 import com.vedantu.counselling.data.repository.*;
+import com.vedantu.counselling.data.request.CounsellingDataRequest;
+import com.vedantu.counselling.data.response.CounsellingData;
+import com.vedantu.counselling.data.response.CounsellingDataResponse;
 import com.vedantu.counselling.data.service.mapper.CounsellingDataMapper;
 import com.vedantu.counselling.data.view.CityData;
 import com.vedantu.counselling.data.view.CounsellingDataMetadata;
@@ -10,10 +13,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CounsellingDataService {
+
+    @Autowired
+    private EntityManager entityManager;
 
     private final CategoryRepository categoryRepository;
 
@@ -64,7 +73,7 @@ public class CounsellingDataService {
         List<Integer> distinctDurations = branchrepository.findDistinctDurations();
         List<Integer> distinctYears = rankRepository.findDistinctYears();
         List<MaxClosingRankByRankType> maxClosingRankByRankTypes = rankRepository.findMaxClosingRankByRankType();
-        return CounsellingDataMapper.mapCounsellingDataMetadata(categories, genders, quotas, collegeTypes, colleges, branchTags, distinctDurations, distinctYears,maxDistance, maxClosingRankByRankTypes);
+        return CounsellingDataMapper.mapCounsellingDataMetadata(categories, genders, quotas, collegeTypes, colleges, branchTags, distinctDurations, distinctYears, maxDistance, maxClosingRankByRankTypes);
     }
 
     @Cacheable(value = {"cities"})
@@ -74,4 +83,60 @@ public class CounsellingDataService {
         return new CityData(defaultCity, cityRepository.findAll());
     }
 
+    public CounsellingDataResponse getCounsellingDataFor(CounsellingDataRequest counsellingDataRequest) {
+
+        if (counsellingDataRequest == null) {
+            return new CounsellingDataResponse();
+        }
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Rank> rankQuery = criteriaBuilder.createQuery(Rank.class);
+        Root<Rank> root = rankQuery.from(Rank.class);
+        Predicate predicate = convertRequestToPredicate(criteriaBuilder, root, counsellingDataRequest);
+        if (predicate != null) {
+            CriteriaQuery<Rank> finalQuery = rankQuery.select(root).where(predicate);
+            List<Rank> rankList = entityManager.createQuery(finalQuery).getResultList();
+            return new CounsellingDataResponse(rankList.size(), getCounsellingData(rankList));
+        }
+        return new CounsellingDataResponse();
+    }
+
+    private Predicate convertRequestToPredicate(CriteriaBuilder criteriaBuilder, Root<Rank> root, CounsellingDataRequest counsellingDataRequest) {
+
+        Predicate predicate = null;
+        if (counsellingDataRequest.getCategoryId() != 0) {
+            Join<Rank, Category> categoryJoin = root.join("category");
+            predicate = categoryJoin.get("categoryId").in(counsellingDataRequest.getCategoryId());
+        }
+
+        if (counsellingDataRequest.getGenderId() != 0) {
+            Join<Rank, Category> genderJoin = root.join("gender");
+            Predicate genderPredicate = genderJoin.get("genderId").in(counsellingDataRequest.getGenderId());
+            predicate = predicate == null ? genderPredicate : criteriaBuilder.and(predicate, genderPredicate);
+        }
+
+        if (counsellingDataRequest.getQuotaId() != 0) {
+            Join<Rank, Category> quotaJoin = root.join("quota");
+            Predicate quotaPredicate = quotaJoin.get("quotaId").in(counsellingDataRequest.getQuotaId());
+            predicate = predicate == null ? quotaPredicate : criteriaBuilder.and(predicate, quotaPredicate);
+        }
+
+        if (counsellingDataRequest.getYears() != null && !counsellingDataRequest.getYears().isEmpty()) {
+            Predicate yearPredicate = root.get("year").in(counsellingDataRequest.getYears());
+            predicate = predicate == null ? yearPredicate : criteriaBuilder.and(predicate, yearPredicate);
+        }
+        return predicate;
+    }
+
+    private List<CounsellingData> getCounsellingData(List<Rank> ranks) {
+        return ranks.stream().filter(r -> r.getCollegeBranch() != null).map(r -> new CounsellingData(1,
+                r.getCollegeBranch().getCollege().getCollegeName(),
+                r.getCollegeBranch().getCollege().getCollegeType().getCollegeTypeName(),
+                r.getCollegeBranch().getBranch().getBranchName(),
+                r.getCategory().getCategoryName(),
+                r.getGender().getGenderName(),
+                r.getQuota().getQuotaName(),
+                r.getYear(),
+                new ThreeTuple<>(r.getRankType().getRankTypeId(), r.getOpenRank(), r.getClosingRank()))).collect(Collectors.toList());
+    }
 }

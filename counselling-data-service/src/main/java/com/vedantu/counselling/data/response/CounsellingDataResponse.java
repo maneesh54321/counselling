@@ -1,12 +1,14 @@
 package com.vedantu.counselling.data.response;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
-@Getter
 public class CounsellingDataResponse {
     private int totalRecord;
     private List<CounsellingData> counsellingData;

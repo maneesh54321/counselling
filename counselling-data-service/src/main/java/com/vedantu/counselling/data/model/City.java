@@ -18,4 +18,12 @@ public class City {
     private String cityDisplayName;
     private String cityFullName;
 
+    @Column(nullable = false)
+    private boolean isDefault;
+
+    public City(int cityId, String cityDisplayName, String cityFullName) {
+        this.cityId = cityId;
+        this.cityDisplayName = cityDisplayName;
+        this.cityFullName = cityFullName;
+    }
 }

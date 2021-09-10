@@ -16,6 +16,7 @@ import java.util.*;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/counsellingapp")
 public class RankingScreenController {
 
     private final CounsellingDataService counsellingDataService;
@@ -25,12 +26,12 @@ public class RankingScreenController {
         this.counsellingDataService = counsellingDataService;
     }
 
-    @GetMapping(value = "/counsellingapp/rank-screen-metadata", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/rank-screen-metadata", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response<CounsellingDataMetadata> getRankingScreenMetadata() {
         return new Response<>("Success", counsellingDataService.getCounsellingDataMetadata());
     }
 
-    @PostMapping(value = "/counsellingapp/rank-screen-get-data", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/rank-screen-get-data", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response<CounsellingDataResponse> getCounsellingDataFor(@RequestBody CounsellingDataRequest counsellingDataRequest) {
         return new Response<>("Success", getDummyData());
     }

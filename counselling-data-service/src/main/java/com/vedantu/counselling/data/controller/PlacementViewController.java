@@ -1,6 +1,7 @@
 package com.vedantu.counselling.data.controller;
 
 import com.vedantu.counselling.data.model.College;
+import com.vedantu.counselling.data.model.CollegeType;
 import com.vedantu.counselling.data.model.Placement;
 import com.vedantu.counselling.data.repository.PlacementRepository;
 import com.vedantu.counselling.data.response.PlacementResponse;
@@ -66,8 +67,14 @@ public class PlacementViewController {
                                                PlacementFilter placementFilter) {
         Predicate predicate = null;
         if(placementFilter.getColleges() != null && ! placementFilter.getColleges().isEmpty()) {
+            Join<Placement, College> collegeJoin = root.join( "college" );
+            predicate = collegeJoin.get( "collegeId" ).in(placementFilter.getColleges());
+        }
+        if(placementFilter.getCollegeTypes() != null && ! placementFilter.getCollegeTypes().isEmpty()) {
             Join<Placement, College> childJoin = root.join( "college" );
-            predicate = childJoin.get( "collegeId" ).in(placementFilter.getColleges());
+            Join<College, CollegeType> collegeTypeJoin= childJoin.join("collegeType");
+            Predicate collegeTypePredicate = collegeTypeJoin.get( "collegeTypeId" ).in(placementFilter.getCollegeTypes());
+            predicate = predicate!= null? cb.and(predicate, collegeTypePredicate): collegeTypePredicate;
         }
         if(placementFilter.getYear() != null && ! placementFilter.getYear().isEmpty()){
             Predicate yearPredicate = root.get("year").in(placementFilter.getYear());

@@ -11,7 +11,7 @@ import java.util.Objects;
 @ToString
 @AllArgsConstructor
 @Entity
-public class BranchTag {
+public class BranchTag implements Comparable<BranchTag>{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "branch_tag_id_generator")
     @SequenceGenerator(name="branch_tag_id_generator", sequenceName = "branch_tag_seq", allocationSize = 1)
@@ -31,5 +31,10 @@ public class BranchTag {
     @Override
     public int hashCode() {
         return Objects.hash(getBranchTagName());
+    }
+
+    @Override
+    public int compareTo(BranchTag o) {
+        return this.branchTagName.compareTo(o.branchTagName);
     }
 }

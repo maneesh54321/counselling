@@ -17,5 +17,4 @@ public class LandingPageResponse {
     private String description;
     private String disclaimer;
     private String videoLink;
-    private Map<String, String>  keywordMapping = new LinkedHashMap<>();
 }

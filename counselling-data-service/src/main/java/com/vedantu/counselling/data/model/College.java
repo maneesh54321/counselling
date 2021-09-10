@@ -20,7 +20,7 @@ public class College {
     @Column(unique = true)
     private String collegeName;
 
-    @OneToOne(cascade=CascadeType.PERSIST)
+    @OneToOne
     @JoinColumn(name = "college_type_id")
     private CollegeType collegeType;
 

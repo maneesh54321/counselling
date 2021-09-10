@@ -13,7 +13,7 @@ public class City {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "city_id_generator")
     @SequenceGenerator(name="city_id_generator", sequenceName = "city_id_seq", allocationSize = 1)
-    private int cityId;
+    private Integer cityId;
 
     private String cityDisplayName;
     private String cityFullName;

@@ -7,6 +7,7 @@ import com.vedantu.counselling.data.response.LandingPageResponse;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -15,15 +16,16 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/counsellingapp")
 @CrossOrigin
 public class LandingPageController {
 
-    @GetMapping(value = "/counsellingapp/get-all-city", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/get-all-city", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response<CityDataResponse> getAllCity() {
         return new Response<>("Success", getDummyCityReponse());
     }
 
-    @GetMapping(value = "/counsellingapp/landing-page-info", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/landing-page-info", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response<LandingPageResponse> getLandingPageInfo(){
         return new Response<>("Success", getDummyLandingPageInfo());
     }

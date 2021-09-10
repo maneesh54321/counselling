@@ -2,12 +2,14 @@ package com.vedantu.counselling.data.service;
 
 import com.vedantu.counselling.data.model.*;
 import com.vedantu.counselling.data.repository.*;
-import com.vedantu.counselling.data.response.CounsellingDataMetadata;
+import com.vedantu.counselling.data.service.mapper.CounsellingDataMapper;
+import com.vedantu.counselling.data.view.CityData;
+import com.vedantu.counselling.data.view.CounsellingDataMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -29,11 +31,16 @@ public class CounsellingDataService {
 
     private final RankRepository rankRepository;
 
+    private final CityRepository cityRepository;
+
+    private final int maxDistance;
+
     @Autowired
     public CounsellingDataService(CategoryRepository categoryRepository, GenderRepository genderRepository,
                                   QuotaRepository quotaRepository, CollegeTypeRepository collegeTypeRepository,
                                   CollegeRepository collegeRepository, BranchTagRepository branchTagRepository,
-                                  BranchRepository branchrepository, RankRepository rankRepository) {
+                                  BranchRepository branchrepository, RankRepository rankRepository, CityRepository cityRepository,
+                                  @Value("${data.maxDistance}") int maxDistance) {
         this.categoryRepository = categoryRepository;
         this.genderRepository = genderRepository;
         this.quotaRepository = quotaRepository;
@@ -42,6 +49,8 @@ public class CounsellingDataService {
         this.branchTagRepository = branchTagRepository;
         this.branchrepository = branchrepository;
         this.rankRepository = rankRepository;
+        this.cityRepository = cityRepository;
+        this.maxDistance = maxDistance;
     }
 
     @Cacheable(value = {"counsellingDataMetadata"})
@@ -54,12 +63,15 @@ public class CounsellingDataService {
         List<BranchTag> branchTags = branchTagRepository.findAll();
         List<Integer> distinctDurations = branchrepository.findDistinctDurations();
         List<Integer> distinctYears = rankRepository.findDistinctYears();
-//        TODO: Add logic to fetch maxRanks by rank type
-//        TODO: Add maxDistance fetching logic
-        return new CounsellingDataMetadata(
-                categories, genders, quotas, collegeTypes, colleges, branchTags,
-                distinctDurations, distinctYears, 3000, Collections.emptyMap()
-        );
+        List<MaxClosingRankByRankType> maxClosingRankByRankTypes = rankRepository.findMaxClosingRankByRankType();
+        return CounsellingDataMapper.mapCounsellingDataMetadata(categories, genders, quotas, collegeTypes, colleges, branchTags, distinctDurations, distinctYears,maxDistance, maxClosingRankByRankTypes);
+    }
+
+    @Cacheable(value = {"cities"})
+    public CityData getAllCities() {
+        List<City> cities = cityRepository.findAll();
+        City defaultCity = cities.stream().filter(City::isDefault).findFirst().orElse(null);
+        return new CityData(defaultCity, cityRepository.findAll());
     }
 
 }

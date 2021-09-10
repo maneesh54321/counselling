@@ -11,7 +11,7 @@ import java.util.Objects;
 @ToString
 @AllArgsConstructor
 @Entity
-public class Branch {
+public class Branch implements Comparable<Branch> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "branch_id_generator")
     @SequenceGenerator(name="branch_id_generator", sequenceName = "branch_id_seq", allocationSize = 1)
@@ -31,11 +31,25 @@ public class Branch {
         if (this == o) return true;
         if (!(o instanceof Branch)) return false;
         Branch branch = (Branch) o;
-        return getDuration() == branch.getDuration() && getBranchName().equals(branch.getBranchName()) && getBranchTag().equals(branch.getBranchTag());
+        return Objects.equals(getDuration(), branch.getDuration()) && getBranchName().equals(branch.getBranchName()) && getBranchTag().equals(branch.getBranchTag());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getBranchName(), getDuration(), getBranchTag());
+    }
+
+    @Override
+    public int compareTo(Branch o) {
+        if(this == o){
+            return 0;
+        }
+        if(Objects.equals(this.branchTag, o.getBranchTag())){
+            if(Objects.equals(this.branchName, o.getBranchName())){
+                return Integer.compare(this.duration, o.getDuration());
+            }
+            return this.branchName.compareTo(o.getBranchName());
+        }
+        return this.branchTag.compareTo(o.getBranchTag());
     }
 }

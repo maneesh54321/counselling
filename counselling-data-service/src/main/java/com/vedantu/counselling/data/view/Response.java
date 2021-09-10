@@ -1,4 +1,4 @@
-package com.vedantu.counselling.data.response;
+package com.vedantu.counselling.data.view;
 
 import lombok.*;
 
@@ -8,6 +8,6 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 public class Response<T> {
-    private String status;
+    private ResponseStatus status;
     private T data;
 }

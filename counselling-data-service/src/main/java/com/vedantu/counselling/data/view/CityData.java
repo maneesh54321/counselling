@@ -1,4 +1,4 @@
-package com.vedantu.counselling.data.response;
+package com.vedantu.counselling.data.view;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import lombok.*;
 @Setter
 @ToString
 @AllArgsConstructor
-public class CityDataResponse {
+public class CityData {
     private City defaultCity;
     private List<City> allCity;
 }

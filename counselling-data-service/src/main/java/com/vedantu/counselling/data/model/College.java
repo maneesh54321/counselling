@@ -1,24 +1,21 @@
 package com.vedantu.counselling.data.model;
 
-import javax.persistence.*;
-
 import lombok.*;
 
-import java.util.List;
+import javax.persistence.*;
 import java.util.Objects;
-import java.util.Set;
 
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Entity
 public class College {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "college_id_generator")
     @SequenceGenerator(name="college_id_generator", sequenceName = "college_id_seq", allocationSize = 1)
-    private Integer collegeId;
+    private int collegeId;
 
     @Column(unique = true)
     private String collegeName;

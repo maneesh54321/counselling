@@ -15,7 +15,7 @@ public class Branch {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "branch_id_generator")
     @SequenceGenerator(name="branch_id_generator", sequenceName = "branch_id_seq", allocationSize = 1)
-    private Integer branchId;
+    private int branchId;
 
     @Column(nullable = false)
     private String branchName;

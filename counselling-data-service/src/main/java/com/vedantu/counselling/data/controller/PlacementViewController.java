@@ -3,7 +3,8 @@ package com.vedantu.counselling.data.controller;
 import com.vedantu.counselling.data.model.Placement;
 import com.vedantu.counselling.data.repository.PlacementRepository;
 import com.vedantu.counselling.data.response.PlacementResponse;
-import com.vedantu.counselling.data.response.Response;
+import com.vedantu.counselling.data.view.Response;
+import com.vedantu.counselling.data.view.ResponseStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,7 +33,7 @@ public class PlacementViewController {
     public Response<List<PlacementResponse>> getPlacements(PlacementFilter placementFilter){
 
         if(placementFilter == null)
-            return new Response<>("Success", getResponsePlacements(placementRepository.findAll()));
+            return new Response<>(ResponseStatus.SUCCESS, getResponsePlacements(placementRepository.findAll()));
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Placement> cQuery = cb.createQuery(Placement.class);
@@ -41,7 +42,7 @@ public class PlacementViewController {
         CriteriaQuery<Placement> finalQuery = cQuery.select(root).where(predicate);
         TypedQuery<Placement> query = em.createQuery(finalQuery);
         List<Placement> placementList = query.getResultList();
-        return new Response<>("Success", getResponsePlacements(placementList));
+        return new Response<>(ResponseStatus.SUCCESS, getResponsePlacements(placementList));
     }
 
     private List<PlacementResponse> getResponsePlacements(List<Placement> placementList) {

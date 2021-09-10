@@ -4,18 +4,18 @@ import com.vedantu.counselling.data.model.CollegeBranch;
 import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 @Builder
 public class PlacementResponse {
-    private String collegeName;
-    private String tag;
+    private String college;
+    private String collegeType;
     private String ugOrPg;
     private int year;
     private int averagePackage;
     private int maxPackage;
     private int minPackage;
-    private int noOfStudent;
-    private int noOfPlacedStudent;
-    private int noOfHigherStudyCount;
-
+    private BigDecimal studentPlacedPercent;
+    private BigDecimal studentHigherStudyPercent;
 }

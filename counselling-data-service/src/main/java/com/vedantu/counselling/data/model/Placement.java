@@ -3,6 +3,7 @@ package com.vedantu.counselling.data.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @NoArgsConstructor
 @Getter
@@ -28,7 +29,6 @@ public class Placement {
     private int minPackage;
     private String ugOrPg;
 
-    private int totalNoOfStudent;
-    private int noOfPlacedStudent;
-    private int noOfHigherStudy;
+    private BigDecimal studentPlacedPercentage;
+    private BigDecimal studentHigherStudyPercentage;
 }

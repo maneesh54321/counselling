@@ -79,8 +79,7 @@ public class CounsellingDataService {
     @Cacheable(value = {"cities"})
     public CityData getAllCities() {
         List<City> cities = cityRepository.findAll();
-        City defaultCity = cities.stream().filter(City::isDefault).findFirst().orElse(null);
-        return new CityData(defaultCity, cityRepository.findAll());
+        return CounsellingDataMapper.mapCityData(cities);
     }
 
     public CounsellingDataResponse getCounsellingDataFor(CounsellingDataRequest counsellingDataRequest) {

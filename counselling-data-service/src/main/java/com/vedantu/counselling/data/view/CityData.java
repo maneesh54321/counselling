@@ -11,6 +11,6 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 public class CityData {
-    private City defaultCity;
-    private List<City> allCity;
+    private CityView defaultCity;
+    private List<CityView> allCity;
 }

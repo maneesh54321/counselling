@@ -12,7 +12,7 @@ import java.io.InputStream;
 @Slf4j
 public class DownloadService {
 
-    public byte[] downloadFile(String fileName) throws IOException {
+    public byte[] downloadFile(String fileName) {
         final int bufLen = 4 * 0x400; // 4KB
         byte[] buf = new byte[bufLen];
         int readLen;
@@ -26,8 +26,9 @@ public class DownloadService {
 
             return outputStream.toByteArray();
         } catch (IOException e) {
-            log.error("Error occurred while reading the download file!!", e);
-            throw e;
+            String error = "Error occurred while reading the download file!!";
+            log.error(error, e);
+            throw new RuntimeException(error);
         }
     }
 }

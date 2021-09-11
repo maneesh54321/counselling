@@ -55,7 +55,7 @@ public class SummaryDataService {
         return Arrays.asList(download1, download2, download3, download4, download5);
     }
 
-    private List<Video> getAllVideos() throws Exception {
+    private List<Video> getAllVideos() {
         try (BufferedReader videoDescriptionReader = new BufferedReader(new InputStreamReader(new ClassPathResource(VIDEOS_DESCRIPTION_URI).getInputStream()))) {
             List<Video> videos =  videoDescriptionReader.lines()
                     .map(videoDescription -> {
@@ -76,12 +76,14 @@ public class SummaryDataService {
                     .collect(Collectors.toList());
             boolean missingVideo = videos.parallelStream().anyMatch(Objects::isNull);
             if(missingVideo){
-                throw new Exception("Error occurred while parsing some of the videos!!");
+                String errorMessage = "Error occurred while parsing some of the videos!!";
+                log.error(errorMessage);
+                throw new RuntimeException(errorMessage);
             }
             return videos;
         } catch (IOException e ) {
             log.error("Exception occurred while reading videos description file!!!", e);
-            throw e;
+            throw new RuntimeException("Exception occurred while reading videos description file!!!!!");
         }
     }
 }

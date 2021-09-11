@@ -136,6 +136,6 @@ public class CounsellingDataService {
                 r.getGender().getName(),
                 r.getQuota().getName(),
                 r.getYear(),
-                new ThreeTuple<>(r.getRankType().getRankTypeId(), r.getOpenRank(), r.getClosingRank()))).collect(Collectors.toList());
+                new ThreeTuple<>(r.getRankType().getId(), r.getOpenRank(), r.getClosingRank()))).collect(Collectors.toList());
     }
 }

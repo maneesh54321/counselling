@@ -1,9 +1,9 @@
 package com.vedantu.counselling.data.controller;
 
-import com.vedantu.counselling.data.model.College;
-import com.vedantu.counselling.data.model.CollegeType;
-import com.vedantu.counselling.data.model.Placement;
+import com.vedantu.counselling.data.FilteringList;
+import com.vedantu.counselling.data.model.*;
 import com.vedantu.counselling.data.repository.PlacementRepository;
+import com.vedantu.counselling.data.response.ListResponse;
 import com.vedantu.counselling.data.response.PlacementResponse;
 import com.vedantu.counselling.data.view.Response;
 import com.vedantu.counselling.data.view.ResponseStatus;
@@ -15,6 +15,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,31 +26,51 @@ import java.util.stream.Collectors;
 public class PlacementViewController {
 
     @Autowired
-    EntityManager em;
+    EntityManager entityManager;
 
     @Autowired
     PlacementRepository placementRepository;
 
     @PostMapping(value = "/placements", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response<List<PlacementResponse>> getPlacements(@RequestBody PlacementFilter placementFilter) {
+    public Response<ListResponse<PlacementResponse>> getPlacements(@RequestBody PlacementFilter placementFilter) {
+        List<PlacementRecord> allRecords = placementRepository.getRecords();
+        List<PlacementRecord> filteredRecords = filteredRecords(allRecords, placementFilter);
 
-        if (placementFilter == null)
-            return new Response<>(ResponseStatus.SUCCESS, getResponsePlacements(placementRepository.findAll()));
+        List<PlacementRecord> sortedRecords = sortRecords(filteredRecords, placementFilter.getSortBy())
 
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Placement> cQuery = cb.createQuery(Placement.class);
-        Root<Placement> root = cQuery.from(Placement.class);
-        Predicate predicate = convertFilterToPredicate(cb, root, placementFilter);
-        if (predicate != null){
-            CriteriaQuery<Placement> finalQuery = cQuery.select(root).where(predicate);
-            TypedQuery<Placement> query = em.createQuery(finalQuery);
-            List<Placement> placementList = query.getResultList();
-            return new Response<>(ResponseStatus.SUCCESS, getResponsePlacements(placementList));
-        }
-        return new Response<>(ResponseStatus.SUCCESS, getResponsePlacements(placementRepository.findAll()));
+        return new Response<>(ResponseStatus.SUCCESS,
+                new ListResponse<PlacementResponse>(
+                        getResponsePlacements(filteredRecords), filteredRecords.size()));
     }
 
-    private List<PlacementResponse> getResponsePlacements(List<Placement> placementList) {
+    private List<PlacementRecord> sortRecords(List<PlacementRecord> filteredRecords, PlacementFilter.PlacementSortBy sortBy) {
+        Comparator.comparing()
+
+    }
+
+    private List<PlacementRecord> filteredRecords(List<PlacementRecord> placementRecords, PlacementFilter placementFilter){
+        List<PlacementRecord> filteredRecords = new ArrayList<>(placementRecords);
+        if(placementFilter.getColleges() != null && ! placementFilter.getColleges().isEmpty()){
+            filteredRecords = filteredRecords.stream().filter(r -> placementFilter.getColleges().contains(r.getCollegeId()))
+                    .collect(Collectors.toList());
+        }
+        if(placementFilter.getCollegeTypes() != null && ! placementFilter.getCollegeTypes().isEmpty()){
+            filteredRecords = filteredRecords.stream().filter(r -> placementFilter.getCollegeTypes().contains(r.getCollegeTypeId()))
+                    .collect(Collectors.toList());
+        }
+        if(placementFilter.getYear() != null && ! placementFilter.getYear().isEmpty()){
+            filteredRecords = filteredRecords.stream().filter(r -> placementFilter.getYear().contains(r.getYear()))
+                    .collect(Collectors.toList());
+        }
+        if(placementFilter.getUg_pg() != null && ! placementFilter.getUg_pg().isEmpty()){
+            filteredRecords = filteredRecords.stream().filter(r -> placementFilter.getUg_pg().equals(r.getUgOrPg()))
+                    .collect(Collectors.toList());
+        }
+        return filteredRecords;
+    }
+
+
+    private List<PlacementResponse> getResponsePlacements(List<PlacementRecord> placementList) {
         return placementList.stream().map(placement -> PlacementResponse
                         .builder()
                         .totalStudents(placement.getTotalStudents() == null ? 0:placement.getTotalStudents())
@@ -60,35 +82,29 @@ public class PlacementViewController {
                         .maxPackage(placement.getMaxPackage() == null ? 0:placement.getMaxPackage())
                         .minPackage(placement.getMinPackage() == null ? 0:placement.getMinPackage())
                         .year(placement.getYear())
-                        .college(placement.getCollege().getName())
-                        .collegeType(placement.getCollege().getType().toString())
+                        .college(placement.getCollegeName())
+                        .collegeType(placement.getCollegeType())
                         .ugOrPg(placement.getUgOrPg())
                         .build())
                 .collect(Collectors.toList());
     }
 
-    private Predicate convertFilterToPredicate(CriteriaBuilder cb, Root<Placement> root,
-                                               PlacementFilter placementFilter) {
-        Predicate predicate = null;
-        if(placementFilter.getColleges() != null && ! placementFilter.getColleges().isEmpty()) {
-            Join<Placement, College> collegeJoin = root.join( "college" );
-            predicate = collegeJoin.get( "id" ).in(placementFilter.getColleges());
+
+    String getSortByColumn(PlacementFilter.PlacementSortBy placementSortBy){
+        if(placementSortBy == null)
+            return Placement_.COLLEGE;
+        switch (placementSortBy) {
+            case COLLEGE:
+                return Placement_.COLLEGE;
+            case AVG_PACKAGE:
+                return Placement_.AVERAGE_PACKAGE;
+            case YEAR:
+                return Placement_.YEAR;
+            default:
+                return Placement_.COLLEGE;
         }
-        if(placementFilter.getCollegeTypes() != null && ! placementFilter.getCollegeTypes().isEmpty()) {
-            Join<Placement, College> childJoin = root.join( "college" );
-            Join<College, CollegeType> collegeTypeJoin= childJoin.join("type");
-            Predicate collegeTypePredicate = collegeTypeJoin.get( "id" ).in(placementFilter.getCollegeTypes());
-            predicate = predicate!= null? cb.and(predicate, collegeTypePredicate): collegeTypePredicate;
-        }
-        if(placementFilter.getYear() != null && ! placementFilter.getYear().isEmpty()){
-            Predicate yearPredicate = root.get("year").in(placementFilter.getYear());
-            predicate = predicate!= null? cb.and(predicate, yearPredicate): yearPredicate;
-        }
-        if(placementFilter.getUg_pg() != null && ! placementFilter.getUg_pg().isEmpty()){
-            Predicate ugPgPredicate = cb.equal(root.get("ugOrPg"), placementFilter.getUg_pg());
-            predicate = predicate!= null? cb.and(predicate, ugPgPredicate): ugPgPredicate;
-        }
-        return predicate;
+
+
     }
 
 }

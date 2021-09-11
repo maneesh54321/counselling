@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -95,7 +96,33 @@ public class CounsellingDataService {
         if (predicate != null) {
             CriteriaQuery<Rank> finalQuery = rankQuery.select(root).where(predicate);
             List<Rank> rankList = entityManager.createQuery(finalQuery).getResultList();
-            return new CounsellingDataResponse(rankList.size(), getCounsellingData(rankList));
+            List<Rank> finalRankList = new LinkedList<>();
+            //TODO move this to table query predicate
+            for (Rank rank: rankList) {
+                boolean add= true;
+                for (TwoTuple<Integer, Integer> rankFilter: counsellingDataRequest.getClosingRanks()) {
+                    if(rank.getRankType().getId() == rankFilter.getFirst() && rank.getClosingRank()<=rankFilter.getSecond()) {
+                        add = false;
+                    }
+                }
+                if(add) {
+                    finalRankList.add(rank);
+                }
+            }
+            int pageSize = counsellingDataRequest.getPageSize();
+            int pageNumber = counsellingDataRequest.getPageNumber();
+
+            List<CounsellingData> finalCounsellingData = getCounsellingData(finalRankList);
+            int size = finalCounsellingData.size();
+            if(size <= pageSize) {
+                return new CounsellingDataResponse(size, finalCounsellingData);
+            }
+            if(( pageNumber+1) * pageSize < size) {
+                finalCounsellingData = finalCounsellingData.subList((pageNumber-1) * pageSize, (pageNumber) * pageSize);
+            } else {
+                finalCounsellingData = finalCounsellingData.subList((pageNumber-1) * pageSize, size);
+            }
+            return new CounsellingDataResponse(size, finalCounsellingData);
         }
         return new CounsellingDataResponse();
     }
@@ -124,6 +151,32 @@ public class CounsellingDataService {
             Predicate yearPredicate = root.get("year").in(counsellingDataRequest.getYears());
             predicate = predicate == null ? yearPredicate : criteriaBuilder.and(predicate, yearPredicate);
         }
+
+        Join<Rank, CollegeBranch> collegeBranchJoin = root.join("collegeBranch");
+        Join<Rank, Branch> branchJoin = collegeBranchJoin.join("branch");
+        if (counsellingDataRequest.getDurations() != null && !counsellingDataRequest.getDurations().isEmpty()) {
+            Predicate durationPredicate = branchJoin.get("duration").in(counsellingDataRequest.getDurations());
+            predicate = predicate == null ? durationPredicate : criteriaBuilder.and(predicate, durationPredicate);
+        }
+
+        if (counsellingDataRequest.getBranchTagIds() != null && !counsellingDataRequest.getBranchTagIds().isEmpty()) {
+            Join<Rank, BranchTag> branchTagJoin = branchJoin.join("branchTag");
+            Predicate branchTagPredicate = branchTagJoin.get("id").in(counsellingDataRequest.getBranchTagIds());
+            predicate = predicate == null ? branchTagPredicate : criteriaBuilder.and(predicate, branchTagPredicate);
+        }
+
+        Join<Rank, College> collegeJoin = collegeBranchJoin.join("college");
+        if (counsellingDataRequest.getCollegeIds() != null && !counsellingDataRequest.getCollegeIds().isEmpty()) {
+            Predicate collegePredicate = collegeJoin.get("id").in(counsellingDataRequest.getCollegeIds());
+            predicate = predicate == null ? collegePredicate : criteriaBuilder.and(predicate, collegePredicate);
+        }
+
+        if (counsellingDataRequest.getCollegeTagIds() != null && !counsellingDataRequest.getCollegeTagIds().isEmpty()) {
+            Join<Rank, CollegeType> collegeType = collegeJoin.join("type");
+            Predicate collegeTypePredicate = collegeType.get("id").in(counsellingDataRequest.getCollegeTagIds());
+            predicate = predicate == null ? collegeTypePredicate : criteriaBuilder.and(predicate, collegeTypePredicate);
+        }
+
         return predicate;
     }
 

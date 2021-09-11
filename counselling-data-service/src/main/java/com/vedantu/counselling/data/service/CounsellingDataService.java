@@ -3,6 +3,7 @@ package com.vedantu.counselling.data.service;
 import com.vedantu.counselling.data.model.*;
 import com.vedantu.counselling.data.repository.*;
 import com.vedantu.counselling.data.request.CounsellingDataRequest;
+import com.vedantu.counselling.data.request.SortType;
 import com.vedantu.counselling.data.response.CounsellingData;
 import com.vedantu.counselling.data.response.CounsellingDataResponse;
 import com.vedantu.counselling.data.service.mapper.CounsellingDataMapper;
@@ -14,6 +15,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,29 +80,33 @@ public class CounsellingDataService {
         return CounsellingDataMapper.mapCityData(cities);
     }
 
-    public CounsellingDataResponse getCounsellingDataFor(CounsellingDataRequest counsellingDataRequest) {
+    public CounsellingDataResponse getCounsellingDataFor(CounsellingDataRequest request) {
 
-        if (counsellingDataRequest == null) {
+        if (request == null) {
             return new CounsellingDataResponse();
         }
 
         List<CounsellingDbData> allData = rankRepository.findCounsellingDbData();
 
-        List<CounsellingData> finalCounsellingData = getCounsellingData(filterDataForRequest(allData, counsellingDataRequest));
+        List<CounsellingData> finalCounsellingData = getCounsellingData(filterDataForRequest(allData, request));
 
-        int pageSize = counsellingDataRequest.getPageSize();
-        int pageNumber = counsellingDataRequest.getPageNumber();
+        Comparator<CounsellingData> comparator = request.getSortType().equals(SortType.ASC) ? request.getCounsellingDataSortBy().getComparator() : request.getCounsellingDataSortBy().getComparator().reversed();
+        finalCounsellingData.sort(comparator);
 
         int size = finalCounsellingData.size();
+
+        return new CounsellingDataResponse(size, getPaginatedList(finalCounsellingData, size, request.getPageSize(), request.getPageNumber()));
+    }
+
+    private List<CounsellingData> getPaginatedList(List<CounsellingData> finalCounsellingData, int size, int pageSize, int pageNumber) {
         if(size <= pageSize) {
-            return new CounsellingDataResponse(size, finalCounsellingData);
+           return finalCounsellingData;
         }
-        if(( pageNumber+1) * pageSize < size) {
-            finalCounsellingData = finalCounsellingData.subList((pageNumber-1) * pageSize, (pageNumber) * pageSize);
+        if(( pageNumber +1) * pageSize < size) {
+            return finalCounsellingData.subList((pageNumber -1) * pageSize, pageNumber * pageSize);
         } else {
-            finalCounsellingData = finalCounsellingData.subList((pageNumber-1) * pageSize, size);
+            return finalCounsellingData.subList((pageNumber -1) * pageSize, size);
         }
-        return new CounsellingDataResponse(size, finalCounsellingData);
     }
 
     private List<CounsellingDbData> filterDataForRequest(List<CounsellingDbData> allData, CounsellingDataRequest counsellingDataRequest) {

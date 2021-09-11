@@ -22,6 +22,6 @@ public class CounsellingDataRequest {
     private List<Integer> durations;
     private List<Integer> years;
     private List<TwoTuple<Integer, Integer>> closingRanks;
-    private SortBy sortBy;
+    private CounsellingDataSortBy counsellingDataSortBy;
     private SortType sortType;
 }

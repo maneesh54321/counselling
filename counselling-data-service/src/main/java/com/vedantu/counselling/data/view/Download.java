@@ -6,5 +6,4 @@ import lombok.Data;
 public class Download {
     private final int id;
     private final String description;
-    private final String fileName;
 }

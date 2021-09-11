@@ -1,5 +1,8 @@
 package com.vedantu.counselling.data.service;
 
+import com.vedantu.counselling.data.model.CounsellingDataFile;
+import com.vedantu.counselling.data.repository.CounsellingDataFileRepository;
+import com.vedantu.counselling.data.service.mapper.SummaryServiceDataMapper;
 import com.vedantu.counselling.data.view.Download;
 import com.vedantu.counselling.data.view.SummaryData;
 import com.vedantu.counselling.data.view.Video;
@@ -30,16 +33,19 @@ public class SummaryDataService {
 
     private static final String VIDEOS_DESCRIPTION_URI = "videos-metadata.txt";
 
+    private final CounsellingDataFileRepository counsellingDataFileRepository;
+
     @Autowired
     public SummaryDataService(
             @Value("${data.summary.description}") String description,
-            @Value("${data.summary.disclaimer}") String disclaimer) {
+            @Value("${data.summary.disclaimer}") String disclaimer, CounsellingDataFileRepository counsellingDataFileRepository) {
         this.description = description;
         this.disclaimer = disclaimer;
+        this.counsellingDataFileRepository = counsellingDataFileRepository;
     }
 
     @Cacheable("summary")
-    public SummaryData getSummary() throws Exception {
+    public SummaryData getSummary() {
         SummaryData summaryData = new SummaryData(description, disclaimer);
         summaryData.setVideos(getAllVideos());
         summaryData.setDownloads(fetchDownloads());
@@ -47,12 +53,7 @@ public class SummaryDataService {
     }
 
     private List<Download> fetchDownloads() {
-        Download download1 = new Download(0, "file 01 description", "file01");
-        Download download2 = new Download(1, "file 02 description", "file02");
-        Download download3 = new Download(2, "file 03 description", "file03");
-        Download download4 = new Download(3, "file 04 description", "file04");
-        Download download5 = new Download(4, "file 05 description", "file05");
-        return Arrays.asList(download1, download2, download3, download4, download5);
+        return SummaryServiceDataMapper.mapDownloads(counsellingDataFileRepository.findAll());
     }
 
     private List<Video> getAllVideos() {

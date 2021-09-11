@@ -1,17 +1,20 @@
 package com.vedantu.counselling.data.controller;
 
+import com.vedantu.counselling.data.exception.InvalidInputException;
 import com.vedantu.counselling.data.service.CounsellingDataService;
 import com.vedantu.counselling.data.service.DownloadService;
 import com.vedantu.counselling.data.service.SummaryDataService;
-import com.vedantu.counselling.data.view.CityData;
-import com.vedantu.counselling.data.view.Response;
 import com.vedantu.counselling.data.view.ResponseStatus;
-import com.vedantu.counselling.data.view.SummaryData;
+import com.vedantu.counselling.data.view.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.activation.MimetypesFileTypeMap;
+import java.util.Objects;
 
 @RestController
 @CrossOrigin
@@ -41,14 +44,29 @@ public class LandingPageController {
         return new Response<>(ResponseStatus.SUCCESS, summaryDataService.getSummary());
     }
 
-    @GetMapping(value = "/download/{fileName}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<byte[]> downloadFile(@PathVariable("fileName") String fileName) throws Exception {
-        byte[] downloadFile = this.downloadService.downloadFile(fileName);
+    @GetMapping(value = "/download/{fileId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable("fileId") Integer fileId) throws InvalidInputException {
+        if(Objects.isNull(fileId)){
+            throw new InvalidInputException("File id can not be null!!");
+        }
+
+        DownloadedFile downloadedFile = this.downloadService.downloadFile(fileId);
+        ByteArrayResource downloadFileByteArrayResource = new ByteArrayResource(downloadedFile.getBytes());
+
         return ResponseEntity.ok()
-                .contentLength(downloadFile.length)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName + ".pdf")
-                             .body(downloadFile);
+                .contentLength(downloadFileByteArrayResource.contentLength())
+                .header(HttpHeaders.CONTENT_TYPE, getContentType(downloadedFile))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + downloadedFile.getName() + "." + downloadedFile.getType())
+                             .body(downloadFileByteArrayResource);
+    }
+
+    private String getContentType(DownloadedFile downloadedFile) {
+        MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
+        String contentType = fileTypeMap.getContentType(downloadedFile.getName()+downloadedFile.getType());
+        if(contentType == null){
+            contentType = "application/octet-stream";
+        }
+        return contentType;
     }
 
 }

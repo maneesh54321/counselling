@@ -6,11 +6,8 @@ import lombok.*;
 import java.util.List;
 import java.util.Map;
 
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
-@AllArgsConstructor
+@Data
+@Builder
 public class CounsellingDataMetadata {
     private List<CategoryView> categories;
     private List<GenderView> genders;

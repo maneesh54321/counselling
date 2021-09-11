@@ -16,6 +16,7 @@ public class SummaryData {
     private String description;
     private String disclaimer;
     private List<Video> videos;
+    private List<Download> downloads;
 
     public SummaryData(String description, String disclaimer) {
         this.description = description;
@@ -27,5 +28,12 @@ public class SummaryData {
             videos = new ArrayList<>();
         }
         videos.add(newVideo);
+    }
+
+    public void addDownload(Download newDownload){
+        if(downloads == null){
+            downloads = new ArrayList<>();
+        }
+        downloads.add(newDownload);
     }
 }

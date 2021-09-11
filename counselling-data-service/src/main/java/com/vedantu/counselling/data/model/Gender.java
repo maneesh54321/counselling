@@ -16,7 +16,7 @@ public class Gender {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gender_id_generator")
     @SequenceGenerator(name="gender_id_generator", sequenceName = "gender_seq", allocationSize = 1)
-    private int genderId;
+    private int id;
 
     @Column(unique = true, nullable = false)
     private String name;

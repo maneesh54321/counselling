@@ -16,7 +16,7 @@ public class Quota {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "quota_id_generator")
     @SequenceGenerator(name="quota_id_generator", sequenceName = "quota_seq", allocationSize = 1)
-    private int quotaId;
+    private int id;
 
     @Column(unique = true, nullable = false)
     private String name;

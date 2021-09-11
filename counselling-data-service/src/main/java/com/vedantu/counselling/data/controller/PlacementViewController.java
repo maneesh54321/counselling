@@ -1,7 +1,6 @@
 package com.vedantu.counselling.data.controller;
 
-import com.vedantu.counselling.data.FilteringList;
-import com.vedantu.counselling.data.model.*;
+import com.vedantu.counselling.data.model.PlacementRecord;
 import com.vedantu.counselling.data.repository.PlacementRepository;
 import com.vedantu.counselling.data.response.ListResponse;
 import com.vedantu.counselling.data.response.PlacementResponse;
@@ -11,12 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,9 +21,6 @@ import java.util.stream.Collectors;
 public class PlacementViewController {
 
     @Autowired
-    EntityManager entityManager;
-
-    @Autowired
     PlacementRepository placementRepository;
 
     @PostMapping(value = "/placements", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -36,16 +28,14 @@ public class PlacementViewController {
         List<PlacementRecord> allRecords = placementRepository.getRecords();
         List<PlacementRecord> filteredRecords = filteredRecords(allRecords, placementFilter);
 
-        List<PlacementRecord> sortedRecords = sortRecords(filteredRecords, placementFilter.getSortBy())
+        List<PlacementRecord> sortedRecords = sortRecords(filteredRecords, placementFilter.getSortBy());
 
-        return new Response<>(ResponseStatus.SUCCESS,
-                new ListResponse<PlacementResponse>(
-                        getResponsePlacements(filteredRecords), filteredRecords.size()));
+        return new Response<>(ResponseStatus.SUCCESS, new ListResponse<>(getResponsePlacements(filteredRecords), sortedRecords.size()));
     }
 
     private List<PlacementRecord> sortRecords(List<PlacementRecord> filteredRecords, PlacementFilter.PlacementSortBy sortBy) {
-        Comparator.comparing()
-
+        filteredRecords.sort(sortBy.getComparator());
+        return filteredRecords;
     }
 
     private List<PlacementRecord> filteredRecords(List<PlacementRecord> placementRecords, PlacementFilter placementFilter){
@@ -88,23 +78,4 @@ public class PlacementViewController {
                         .build())
                 .collect(Collectors.toList());
     }
-
-
-    String getSortByColumn(PlacementFilter.PlacementSortBy placementSortBy){
-        if(placementSortBy == null)
-            return Placement_.COLLEGE;
-        switch (placementSortBy) {
-            case COLLEGE:
-                return Placement_.COLLEGE;
-            case AVG_PACKAGE:
-                return Placement_.AVERAGE_PACKAGE;
-            case YEAR:
-                return Placement_.YEAR;
-            default:
-                return Placement_.COLLEGE;
-        }
-
-
-    }
-
 }

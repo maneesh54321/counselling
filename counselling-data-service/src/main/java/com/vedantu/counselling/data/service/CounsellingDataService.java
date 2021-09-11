@@ -13,17 +13,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.*;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class CounsellingDataService {
-
-    @Autowired
-    private EntityManager entityManager;
 
     private final CategoryRepository categoryRepository;
 
@@ -89,106 +84,86 @@ public class CounsellingDataService {
             return new CounsellingDataResponse();
         }
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Rank> rankQuery = criteriaBuilder.createQuery(Rank.class);
-        Root<Rank> root = rankQuery.from(Rank.class);
-        Predicate predicate = convertRequestToPredicate(criteriaBuilder, root, counsellingDataRequest);
-        if (predicate != null) {
-            CriteriaQuery<Rank> finalQuery = rankQuery.select(root).where(predicate);
-            List<Rank> rankList = entityManager.createQuery(finalQuery).getResultList();
-            List<Rank> finalRankList = new LinkedList<>();
-            //TODO move this to table query predicate
-            for (Rank rank: rankList) {
+        List<CounsellingDbData> allData = rankRepository.findCounsellingDbData();
+
+        List<CounsellingData> finalCounsellingData = getCounsellingData(filterDataForRequest(allData, counsellingDataRequest));
+
+        int pageSize = counsellingDataRequest.getPageSize();
+        int pageNumber = counsellingDataRequest.getPageNumber();
+
+        int size = finalCounsellingData.size();
+        if(size <= pageSize) {
+            return new CounsellingDataResponse(size, finalCounsellingData);
+        }
+        if(( pageNumber+1) * pageSize < size) {
+            finalCounsellingData = finalCounsellingData.subList((pageNumber-1) * pageSize, (pageNumber) * pageSize);
+        } else {
+            finalCounsellingData = finalCounsellingData.subList((pageNumber-1) * pageSize, size);
+        }
+        return new CounsellingDataResponse(size, finalCounsellingData);
+    }
+
+    private List<CounsellingDbData> filterDataForRequest(List<CounsellingDbData> allData, CounsellingDataRequest counsellingDataRequest) {
+        List<CounsellingDbData> filteredData = allData;
+        if (counsellingDataRequest.getCategoryId() != 0) {
+            filteredData = filteredData.stream().filter(entry -> entry.getCategoryId() == counsellingDataRequest.getCategoryId()).collect(Collectors.toList());
+        }
+
+        if (counsellingDataRequest.getGenderId() != 0) {
+            filteredData = filteredData.stream().filter(entry -> entry.getGenderId() == counsellingDataRequest.getGenderId()).collect(Collectors.toList());
+        }
+
+        if (counsellingDataRequest.getQuotaId() != 0) {
+            filteredData = filteredData.stream().filter(entry -> entry.getQuotaId() == counsellingDataRequest.getQuotaId()).collect(Collectors.toList());
+        }
+
+        if (counsellingDataRequest.getYears() != null && !counsellingDataRequest.getYears().isEmpty()) {
+            filteredData = filteredData.stream().filter(entry -> counsellingDataRequest.getYears().contains(entry.getYear())).collect(Collectors.toList());
+        }
+
+        if (counsellingDataRequest.getDurations() != null && !counsellingDataRequest.getDurations().isEmpty()) {
+            filteredData = filteredData.stream().filter(entry -> counsellingDataRequest.getDurations().contains(entry.getDuration())).collect(Collectors.toList());
+        }
+
+        if (counsellingDataRequest.getBranchTagIds() != null && !counsellingDataRequest.getBranchTagIds().isEmpty()) {
+            filteredData = filteredData.stream().filter(entry -> counsellingDataRequest.getBranchTagIds().contains(entry.getBranchTagId())).collect(Collectors.toList());
+        }
+
+        if (counsellingDataRequest.getCollegeIds() != null && !counsellingDataRequest.getCollegeIds().isEmpty()) {
+            filteredData = filteredData.stream().filter(entry -> counsellingDataRequest.getCollegeIds().contains(entry.getCollegeId())).collect(Collectors.toList());
+        }
+
+        if (counsellingDataRequest.getCollegeTagIds() != null && !counsellingDataRequest.getCollegeTagIds().isEmpty()) {
+            filteredData = filteredData.stream().filter(entry -> counsellingDataRequest.getCollegeTagIds().contains(entry.getCollegeTypeId())).collect(Collectors.toList());
+        }
+
+        if (counsellingDataRequest.getClosingRanks() != null && !counsellingDataRequest.getCollegeTagIds().isEmpty()) {
+            List<CounsellingDbData> finalData = new ArrayList<>();
+            for (CounsellingDbData counsellingDbData: filteredData) {
                 boolean add= true;
                 for (TwoTuple<Integer, Integer> rankFilter: counsellingDataRequest.getClosingRanks()) {
-                    if(rank.getRankType().getId() == rankFilter.getFirst() && rank.getClosingRank()<=rankFilter.getSecond()) {
+                    if(counsellingDbData.getRankTypeId() == rankFilter.getFirst() && counsellingDbData.getCloseRank()<=rankFilter.getSecond()) {
                         add = false;
                     }
                 }
                 if(add) {
-                    finalRankList.add(rank);
+                    finalData.add(counsellingDbData);
                 }
             }
-            int pageSize = counsellingDataRequest.getPageSize();
-            int pageNumber = counsellingDataRequest.getPageNumber();
-
-            List<CounsellingData> finalCounsellingData = getCounsellingData(finalRankList);
-            int size = finalCounsellingData.size();
-            if(size <= pageSize) {
-                return new CounsellingDataResponse(size, finalCounsellingData);
-            }
-            if(( pageNumber+1) * pageSize < size) {
-                finalCounsellingData = finalCounsellingData.subList((pageNumber-1) * pageSize, (pageNumber) * pageSize);
-            } else {
-                finalCounsellingData = finalCounsellingData.subList((pageNumber-1) * pageSize, size);
-            }
-            return new CounsellingDataResponse(size, finalCounsellingData);
+            filteredData = finalData;
         }
-        return new CounsellingDataResponse();
+        return filteredData;
     }
 
-    private Predicate convertRequestToPredicate(CriteriaBuilder criteriaBuilder, Root<Rank> root, CounsellingDataRequest counsellingDataRequest) {
-
-        Predicate predicate = null;
-        if (counsellingDataRequest.getCategoryId() != 0) {
-            Join<Rank, Category> categoryJoin = root.join("category");
-            predicate = categoryJoin.get("id").in(counsellingDataRequest.getCategoryId());
-        }
-
-        if (counsellingDataRequest.getGenderId() != 0) {
-            Join<Rank, Gender> genderJoin = root.join("gender");
-            Predicate genderPredicate = genderJoin.get("id").in(counsellingDataRequest.getGenderId());
-            predicate = predicate == null ? genderPredicate : criteriaBuilder.and(predicate, genderPredicate);
-        }
-
-        if (counsellingDataRequest.getQuotaId() != 0) {
-            Join<Rank, Quota> quotaJoin = root.join("quota");
-            Predicate quotaPredicate = quotaJoin.get("id").in(counsellingDataRequest.getQuotaId());
-            predicate = predicate == null ? quotaPredicate : criteriaBuilder.and(predicate, quotaPredicate);
-        }
-
-        if (counsellingDataRequest.getYears() != null && !counsellingDataRequest.getYears().isEmpty()) {
-            Predicate yearPredicate = root.get("year").in(counsellingDataRequest.getYears());
-            predicate = predicate == null ? yearPredicate : criteriaBuilder.and(predicate, yearPredicate);
-        }
-
-        Join<Rank, CollegeBranch> collegeBranchJoin = root.join("collegeBranch");
-        Join<Rank, Branch> branchJoin = collegeBranchJoin.join("branch");
-        if (counsellingDataRequest.getDurations() != null && !counsellingDataRequest.getDurations().isEmpty()) {
-            Predicate durationPredicate = branchJoin.get("duration").in(counsellingDataRequest.getDurations());
-            predicate = predicate == null ? durationPredicate : criteriaBuilder.and(predicate, durationPredicate);
-        }
-
-        if (counsellingDataRequest.getBranchTagIds() != null && !counsellingDataRequest.getBranchTagIds().isEmpty()) {
-            Join<Rank, BranchTag> branchTagJoin = branchJoin.join("branchTag");
-            Predicate branchTagPredicate = branchTagJoin.get("id").in(counsellingDataRequest.getBranchTagIds());
-            predicate = predicate == null ? branchTagPredicate : criteriaBuilder.and(predicate, branchTagPredicate);
-        }
-
-        Join<Rank, College> collegeJoin = collegeBranchJoin.join("college");
-        if (counsellingDataRequest.getCollegeIds() != null && !counsellingDataRequest.getCollegeIds().isEmpty()) {
-            Predicate collegePredicate = collegeJoin.get("id").in(counsellingDataRequest.getCollegeIds());
-            predicate = predicate == null ? collegePredicate : criteriaBuilder.and(predicate, collegePredicate);
-        }
-
-        if (counsellingDataRequest.getCollegeTagIds() != null && !counsellingDataRequest.getCollegeTagIds().isEmpty()) {
-            Join<Rank, CollegeType> collegeType = collegeJoin.join("type");
-            Predicate collegeTypePredicate = collegeType.get("id").in(counsellingDataRequest.getCollegeTagIds());
-            predicate = predicate == null ? collegeTypePredicate : criteriaBuilder.and(predicate, collegeTypePredicate);
-        }
-
-        return predicate;
-    }
-
-    private List<CounsellingData> getCounsellingData(List<Rank> ranks) {
-        return ranks.stream().filter(r -> r.getCollegeBranch() != null).map(r -> new CounsellingData(1,
-                r.getCollegeBranch().getCollege().getName(),
-                r.getCollegeBranch().getCollege().getType().getName(),
-                r.getCollegeBranch().getBranch().getName(),
-                r.getCategory().getName(),
-                r.getGender().getName(),
-                r.getQuota().getName(),
+    private List<CounsellingData> getCounsellingData(List<CounsellingDbData> counsellingDbData) {
+        return counsellingDbData.stream().map(r -> new CounsellingData(1,
+                r.getCollege(),
+                r.getCollegeType(),
+                r.getBranch(),
+                r.getCategory(),
+                r.getGender(),
+                r.getQuota(),
                 r.getYear(),
-                new ThreeTuple<>(r.getRankType().getId(), r.getOpenRank(), r.getClosingRank()))).collect(Collectors.toList());
+                new ThreeTuple<>(r.getRankTypeId(), r.getOpenRank(), r.getCloseRank()))).collect(Collectors.toList());
     }
 }

@@ -20,11 +20,11 @@ public class CounsellingDataMapper {
                 .collect(Collectors.toList());
 
         List<GenderView> genderViewList = genders.parallelStream()
-                .map(gender -> new GenderView(gender.getGenderId(), gender.getName()))
+                .map(gender -> new GenderView(gender.getId(), gender.getName()))
                 .collect(Collectors.toList());
 
         List<QuotaView> quotaViewList = quotas.parallelStream()
-                .map(quota -> new QuotaView(quota.getQuotaId(), quota.getName()))
+                .map(quota -> new QuotaView(quota.getId(), quota.getName()))
                 .collect(Collectors.toList());
 
         List<CollegeTypeView> collegeTypeViewList = collegeTypes.parallelStream()

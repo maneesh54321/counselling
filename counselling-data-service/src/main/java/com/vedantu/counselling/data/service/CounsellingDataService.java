@@ -1,5 +1,6 @@
 package com.vedantu.counselling.data.service;
 
+import com.vedantu.counselling.data.PaginationUtil;
 import com.vedantu.counselling.data.model.*;
 import com.vedantu.counselling.data.repository.*;
 import com.vedantu.counselling.data.request.CounsellingDataRequest;
@@ -95,18 +96,8 @@ public class CounsellingDataService {
 
         int size = finalCounsellingData.size();
 
-        return new CounsellingDataResponse(size, getPaginatedList(finalCounsellingData, size, request.getPageSize(), request.getPageNumber()));
-    }
-
-    private List<CounsellingData> getPaginatedList(List<CounsellingData> finalCounsellingData, int size, int pageSize, int pageNumber) {
-        if(size <= pageSize) {
-           return finalCounsellingData;
-        }
-        if(( pageNumber +1) * pageSize < size) {
-            return finalCounsellingData.subList((pageNumber -1) * pageSize, pageNumber * pageSize);
-        } else {
-            return finalCounsellingData.subList((pageNumber -1) * pageSize, size);
-        }
+        return new CounsellingDataResponse(size,
+                PaginationUtil.getPaginatedList(finalCounsellingData, size, request.getPageSize(), request.getPageNumber()));
     }
 
     private List<CounsellingDbData> filterDataForRequest(List<CounsellingDbData> allData, CounsellingDataRequest counsellingDataRequest) {

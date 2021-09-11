@@ -24,10 +24,12 @@ public class Placement {
     @JoinColumn(name = "college_id")
     private College college;
 
-    private int averagePackage;
-    private int maxPackage;
-    private int minPackage;
+    private Integer averagePackage;
+    private Integer maxPackage;
+    private Integer minPackage;
     private String ugOrPg;
+
+    private Integer totalStudents;
 
     private BigDecimal studentPlacedPercentage;
     private BigDecimal studentHigherStudyPercentage;

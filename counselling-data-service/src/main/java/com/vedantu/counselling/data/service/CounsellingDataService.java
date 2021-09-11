@@ -130,12 +130,12 @@ public class CounsellingDataService {
 
     private List<CounsellingData> getCounsellingData(List<Rank> ranks) {
         return ranks.stream().filter(r -> r.getCollegeBranch() != null).map(r -> new CounsellingData(1,
-                r.getCollegeBranch().getCollege().getCollegeName(),
-                r.getCollegeBranch().getCollege().getCollegeType().getCollegeTypeName(),
-                r.getCollegeBranch().getBranch().getBranchName(),
-                r.getCategory().getCategoryName(),
-                r.getGender().getGenderName(),
-                r.getQuota().getQuotaName(),
+                r.getCollegeBranch().getCollege().getName(),
+                r.getCollegeBranch().getCollege().getType().getName(),
+                r.getCollegeBranch().getBranch().getName(),
+                r.getCategory().getName(),
+                r.getGender().getName(),
+                r.getQuota().getName(),
                 r.getYear(),
                 new ThreeTuple<>(r.getRankType().getRankTypeId(), r.getOpenRank(), r.getClosingRank()))).collect(Collectors.toList());
     }

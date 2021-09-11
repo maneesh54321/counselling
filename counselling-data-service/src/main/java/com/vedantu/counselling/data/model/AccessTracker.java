@@ -18,7 +18,7 @@ public class AccessTracker {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "access_id_generator")
     @SequenceGenerator(name="access_id_generator", sequenceName = "access_id_seq", allocationSize = 5)
-    private int accessId;
+    private int id;
 
     private String ip;
 

@@ -19,18 +19,18 @@ public class Gender {
     private int genderId;
 
     @Column(unique = true, nullable = false)
-    private String genderName;
+    private String name;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Gender)) return false;
         Gender gender = (Gender) o;
-        return getGenderName().equals(gender.getGenderName());
+        return getName().equals(gender.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getGenderName());
+        return Objects.hash(getName());
     }
 }

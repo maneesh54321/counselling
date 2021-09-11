@@ -15,10 +15,10 @@ public class Branch implements Comparable<Branch> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "branch_id_generator")
     @SequenceGenerator(name="branch_id_generator", sequenceName = "branch_id_seq", allocationSize = 1)
-    private int branchId;
+    private int id;
 
     @Column(nullable = false)
-    private String branchName;
+    private String name;
 
     private Integer duration;
 
@@ -31,12 +31,12 @@ public class Branch implements Comparable<Branch> {
         if (this == o) return true;
         if (!(o instanceof Branch)) return false;
         Branch branch = (Branch) o;
-        return Objects.equals(getDuration(), branch.getDuration()) && getBranchName().equals(branch.getBranchName()) && getBranchTag().equals(branch.getBranchTag());
+        return Objects.equals(getDuration(), branch.getDuration()) && getName().equals(branch.getName()) && getBranchTag().equals(branch.getBranchTag());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getBranchName(), getDuration(), getBranchTag());
+        return Objects.hash(getName(), getDuration(), getBranchTag());
     }
 
     @Override
@@ -45,10 +45,10 @@ public class Branch implements Comparable<Branch> {
             return 0;
         }
         if(Objects.equals(this.branchTag, o.getBranchTag())){
-            if(Objects.equals(this.branchName, o.getBranchName())){
+            if(Objects.equals(this.name, o.getName())){
                 return Integer.compare(this.duration, o.getDuration());
             }
-            return this.branchName.compareTo(o.getBranchName());
+            return this.name.compareTo(o.getName());
         }
         return this.branchTag.compareTo(o.getBranchTag());
     }

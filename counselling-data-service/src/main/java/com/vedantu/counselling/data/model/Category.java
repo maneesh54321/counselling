@@ -16,20 +16,20 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_id_generator")
     @SequenceGenerator(name="category_id_generator", sequenceName = "category_seq", allocationSize = 1)
-    private int categoryId;
+    private int id;
 
-    private String categoryName;
+    private String name;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Category)) return false;
         Category category = (Category) o;
-        return getCategoryName().equals(category.getCategoryName());
+        return getName().equals(category.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCategoryName());
+        return Objects.hash(getName());
     }
 }

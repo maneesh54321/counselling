@@ -15,15 +15,15 @@ public class City {
     @SequenceGenerator(name="city_id_generator", sequenceName = "city_id_seq", allocationSize = 1)
     private Integer cityId;
 
-    private String cityDisplayName;
-    private String cityFullName;
+    private String displayName;
+    private String fullName;
 
     @Column(nullable = false)
     private boolean isDefault;
 
     public City(int cityId, String cityDisplayName, String cityFullName) {
         this.cityId = cityId;
-        this.cityDisplayName = cityDisplayName;
-        this.cityFullName = cityFullName;
+        this.displayName = cityDisplayName;
+        this.fullName = cityFullName;
     }
 }

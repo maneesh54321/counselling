@@ -19,18 +19,18 @@ public class Quota {
     private int quotaId;
 
     @Column(unique = true, nullable = false)
-    private String quotaName;
+    private String name;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Quota)) return false;
         Quota quota = (Quota) o;
-        return getQuotaName().equals(quota.getQuotaName());
+        return getName().equals(quota.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getQuotaName());
+        return Objects.hash(getName());
     }
 }

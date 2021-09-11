@@ -18,18 +18,18 @@ public class RankType {
     private int rankTypeId;
 
     @Column(unique = true, nullable = false)
-    private String rankTypeName;
+    private String name;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof RankType)) return false;
         RankType rankType = (RankType) o;
-        return getRankTypeName().equals(rankType.getRankTypeName());
+        return getName().equals(rankType.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getRankTypeName());
+        return Objects.hash(getName());
     }
 }

@@ -18,4 +18,5 @@ public class PlacementResponse {
     private int minPackage;
     private BigDecimal studentPlacedPercent;
     private BigDecimal studentHigherStudyPercent;
+    private int totalStudents;
 }

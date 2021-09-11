@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,14 +51,17 @@ public class PlacementViewController {
     private List<PlacementResponse> getResponsePlacements(List<Placement> placementList) {
         return placementList.stream().map(placement -> PlacementResponse
                         .builder()
-                        .studentPlacedPercent(placement.getStudentPlacedPercentage())
-                        .studentHigherStudyPercent(placement.getStudentHigherStudyPercentage())
-                        .averagePackage(placement.getAveragePackage())
-                        .maxPackage(placement.getMaxPackage())
-                        .minPackage(placement.getMinPackage())
+                        .totalStudents(placement.getTotalStudents() == null ? 0:placement.getTotalStudents())
+                        .studentPlacedPercent(placement.getStudentPlacedPercentage()
+                                == null ? BigDecimal.ZERO:placement.getStudentPlacedPercentage())
+                        .studentHigherStudyPercent(placement.getStudentHigherStudyPercentage()
+                                == null ? BigDecimal.ZERO:placement.getStudentHigherStudyPercentage())
+                        .averagePackage(placement.getAveragePackage()== null ? 0:placement.getAveragePackage())
+                        .maxPackage(placement.getMaxPackage() == null ? 0:placement.getMaxPackage())
+                        .minPackage(placement.getMinPackage() == null ? 0:placement.getMinPackage())
                         .year(placement.getYear())
-                        .college(placement.getCollege().getCollegeName())
-                        .collegeType(placement.getCollege().getCollegeType().toString())
+                        .college(placement.getCollege().getName())
+                        .collegeType(placement.getCollege().getType().toString())
                         .ugOrPg(placement.getUgOrPg())
                         .build())
                 .collect(Collectors.toList());

@@ -72,12 +72,12 @@ public class PlacementViewController {
         Predicate predicate = null;
         if(placementFilter.getColleges() != null && ! placementFilter.getColleges().isEmpty()) {
             Join<Placement, College> collegeJoin = root.join( "college" );
-            predicate = collegeJoin.get( "collegeId" ).in(placementFilter.getColleges());
+            predicate = collegeJoin.get( "id" ).in(placementFilter.getColleges());
         }
         if(placementFilter.getCollegeTypes() != null && ! placementFilter.getCollegeTypes().isEmpty()) {
             Join<Placement, College> childJoin = root.join( "college" );
-            Join<College, CollegeType> collegeTypeJoin= childJoin.join("collegeType");
-            Predicate collegeTypePredicate = collegeTypeJoin.get( "collegeTypeId" ).in(placementFilter.getCollegeTypes());
+            Join<College, CollegeType> collegeTypeJoin= childJoin.join("type");
+            Predicate collegeTypePredicate = collegeTypeJoin.get( "id" ).in(placementFilter.getCollegeTypes());
             predicate = predicate!= null? cb.and(predicate, collegeTypePredicate): collegeTypePredicate;
         }
         if(placementFilter.getYear() != null && ! placementFilter.getYear().isEmpty()){

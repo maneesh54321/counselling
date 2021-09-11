@@ -14,7 +14,7 @@ public class Rank {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rank_id_generator")
     @SequenceGenerator(name="rank_id_generator", sequenceName = "rank_id_seq", allocationSize = 1)
-    private int rankId;
+    private int id;
 
     @OneToOne(cascade=CascadeType.PERSIST)
     @JoinColumn(name = "college_branch_id")

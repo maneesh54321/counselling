@@ -105,18 +105,18 @@ public class CounsellingDataService {
         Predicate predicate = null;
         if (counsellingDataRequest.getCategoryId() != 0) {
             Join<Rank, Category> categoryJoin = root.join("category");
-            predicate = categoryJoin.get("categoryId").in(counsellingDataRequest.getCategoryId());
+            predicate = categoryJoin.get("id").in(counsellingDataRequest.getCategoryId());
         }
 
         if (counsellingDataRequest.getGenderId() != 0) {
-            Join<Rank, Category> genderJoin = root.join("gender");
-            Predicate genderPredicate = genderJoin.get("genderId").in(counsellingDataRequest.getGenderId());
+            Join<Rank, Gender> genderJoin = root.join("gender");
+            Predicate genderPredicate = genderJoin.get("id").in(counsellingDataRequest.getGenderId());
             predicate = predicate == null ? genderPredicate : criteriaBuilder.and(predicate, genderPredicate);
         }
 
         if (counsellingDataRequest.getQuotaId() != 0) {
-            Join<Rank, Category> quotaJoin = root.join("quota");
-            Predicate quotaPredicate = quotaJoin.get("quotaId").in(counsellingDataRequest.getQuotaId());
+            Join<Rank, Quota> quotaJoin = root.join("quota");
+            Predicate quotaPredicate = quotaJoin.get("id").in(counsellingDataRequest.getQuotaId());
             predicate = predicate == null ? quotaPredicate : criteriaBuilder.and(predicate, quotaPredicate);
         }
 
@@ -136,6 +136,6 @@ public class CounsellingDataService {
                 r.getGender().getName(),
                 r.getQuota().getName(),
                 r.getYear(),
-                new ThreeTuple<>(r.getRankType().getRankTypeId(), r.getOpenRank(), r.getClosingRank()))).collect(Collectors.toList());
+                new ThreeTuple<>(r.getRankType().getId(), r.getOpenRank(), r.getClosingRank()))).collect(Collectors.toList());
     }
 }

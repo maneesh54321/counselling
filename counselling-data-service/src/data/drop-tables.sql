@@ -1,0 +1,14 @@
+drop table access_tracker;
+drop table distance_mapping;
+drop table rank;
+drop table rank_type;
+drop table college_branch;
+drop table placement;
+drop table branch;
+drop table branch_tag;
+drop table category;
+drop table city;
+drop table college;
+drop table college_type;
+drop table gender;
+drop table quota;

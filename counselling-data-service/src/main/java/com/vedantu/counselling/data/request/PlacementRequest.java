@@ -8,15 +8,15 @@ import java.util.List;
 
 @Data
 public class PlacementRequest {
-    private List<Integer> colleges;
-    private List<Integer> collegeTypes;
-    private List<Integer> year;
-    private String ug_pg;
+    private List<Integer> colleges; //optional
+    private List<Integer> collegeTypes; //optional
+    private List<Integer> year; //optional
+    private String ug_pg; //optional
 
-    private PlacementSortBy sortBy;
-    private int pageNumber;
-    private int pageSize;
-    private SortType sortType;
+    private PlacementSortBy sortBy = PlacementSortBy.COLLEGE;
+    private int pageNumber = 1;
+    private int pageSize; // Mandatory
+    private SortType sortType=SortType.ASC;
 
     public enum PlacementSortBy{
         COLLEGE{

@@ -1,6 +1,7 @@
 package com.vedantu.counselling.data.service;
 
-import com.vedantu.counselling.data.util.PaginationUtil;
+import com.vedantu.counselling.data.Constants;
+
 import com.vedantu.counselling.data.model.*;
 import com.vedantu.counselling.data.repository.*;
 import com.vedantu.counselling.data.request.CounsellingDataRequest;
@@ -8,6 +9,7 @@ import com.vedantu.counselling.data.request.SortType;
 import com.vedantu.counselling.data.response.CounsellingData;
 import com.vedantu.counselling.data.response.CounsellingDataResponse;
 import com.vedantu.counselling.data.service.mapper.CounsellingDataMapper;
+import com.vedantu.counselling.data.util.PaginationUtil;
 import com.vedantu.counselling.data.view.CityData;
 import com.vedantu.counselling.data.view.CounsellingDataMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +49,8 @@ public class CounsellingDataService {
     public CounsellingDataService(CategoryRepository categoryRepository, GenderRepository genderRepository,
                                   QuotaRepository quotaRepository, CollegeTypeRepository collegeTypeRepository,
                                   CollegeRepository collegeRepository, BranchTagRepository branchTagRepository,
-                                  BranchRepository branchrepository, RankRepository rankRepository, CityRepository cityRepository,
+                                  BranchRepository branchrepository, RankRepository rankRepository,
+                                  CityRepository cityRepository,
                                   @Value("${data.maxDistance}") int maxDistance) {
         this.categoryRepository = categoryRepository;
         this.genderRepository = genderRepository;
@@ -100,67 +103,99 @@ public class CounsellingDataService {
                 PaginationUtil.getPaginatedList(finalCounsellingData, size, request.getPageSize(), request.getPageNumber()));
     }
 
-    private List<CounsellingDbData> filterDataForRequest(List<CounsellingDbData> allData, CounsellingDataRequest counsellingDataRequest) {
+    private List<CounsellingDbData> filterDataForRequest(List<CounsellingDbData> allData, CounsellingDataRequest request) {
         List<CounsellingDbData> filteredData = allData;
-        if (counsellingDataRequest.getCategoryId() != 0) {
-            filteredData = filteredData.stream().filter(entry -> entry.getCategoryId() == counsellingDataRequest.getCategoryId()).collect(Collectors.toList());
+        if (request.getCategoryId() != 0) {
+            filteredData = filteredData.stream().filter(entry -> entry.getCategoryId() == request.getCategoryId()).collect(Collectors.toList());
         }
 
-        if (counsellingDataRequest.getGenderId() != 0) {
-            filteredData = filteredData.stream().filter(entry -> entry.getGenderId() == counsellingDataRequest.getGenderId()).collect(Collectors.toList());
+        if (request.getGenderId() != 0) {
+            filteredData = filteredData.stream().filter(entry -> entry.getGenderId() == request.getGenderId()).collect(Collectors.toList());
         }
 
-        if (counsellingDataRequest.getQuotaId() != 0) {
-            filteredData = filteredData.stream().filter(entry -> entry.getQuotaId() == counsellingDataRequest.getQuotaId()).collect(Collectors.toList());
+        if (request.getQuotaId() != 0) {
+            filteredData = filteredData.stream().filter(entry -> entry.getQuotaId() == request.getQuotaId()).collect(Collectors.toList());
         }
 
-        if (counsellingDataRequest.getYears() != null && !counsellingDataRequest.getYears().isEmpty()) {
-            filteredData = filteredData.stream().filter(entry -> counsellingDataRequest.getYears().contains(entry.getYear())).collect(Collectors.toList());
+        if (request.getYears() != null && !request.getYears().isEmpty()) {
+            filteredData = filteredData.stream().filter(entry -> request.getYears().contains(entry.getYear())).collect(Collectors.toList());
         }
 
-        if (counsellingDataRequest.getDurations() != null && !counsellingDataRequest.getDurations().isEmpty()) {
-            filteredData = filteredData.stream().filter(entry -> counsellingDataRequest.getDurations().contains(entry.getDuration())).collect(Collectors.toList());
+        if (request.getDurations() != null && !request.getDurations().isEmpty()) {
+            filteredData = filteredData.stream().filter(entry -> request.getDurations().contains(entry.getDuration())).collect(Collectors.toList());
         }
 
-        if (counsellingDataRequest.getBranchTagIds() != null && !counsellingDataRequest.getBranchTagIds().isEmpty()) {
-            filteredData = filteredData.stream().filter(entry -> counsellingDataRequest.getBranchTagIds().contains(entry.getBranchTagId())).collect(Collectors.toList());
+        if (request.getBranchTagIds() != null && !request.getBranchTagIds().isEmpty()) {
+            filteredData = filteredData.stream().filter(entry -> request.getBranchTagIds().contains(entry.getBranchTagId())).collect(Collectors.toList());
         }
 
-        if (counsellingDataRequest.getCollegeIds() != null && !counsellingDataRequest.getCollegeIds().isEmpty()) {
-            filteredData = filteredData.stream().filter(entry -> counsellingDataRequest.getCollegeIds().contains(entry.getCollegeId())).collect(Collectors.toList());
+        if (request.getCollegeIds() != null && !request.getCollegeIds().isEmpty()) {
+            filteredData = filteredData.stream().filter(entry -> request.getCollegeIds().contains(entry.getCollegeId())).collect(Collectors.toList());
         }
 
-        if (counsellingDataRequest.getCollegeTagIds() != null && !counsellingDataRequest.getCollegeTagIds().isEmpty()) {
-            filteredData = filteredData.stream().filter(entry -> counsellingDataRequest.getCollegeTagIds().contains(entry.getCollegeTypeId())).collect(Collectors.toList());
+        if (request.getCollegeTagIds() != null && !request.getCollegeTagIds().isEmpty()) {
+            filteredData = filteredData.stream().filter(entry -> request.getCollegeTagIds().contains(entry.getCollegeTypeId())).collect(Collectors.toList());
         }
 
-        if (counsellingDataRequest.getClosingRanks() != null && !counsellingDataRequest.getCollegeTagIds().isEmpty()) {
-            List<CounsellingDbData> finalData = new ArrayList<>();
-            for (CounsellingDbData counsellingDbData: filteredData) {
-                boolean add= true;
-                for (TwoTuple<Integer, Integer> rankFilter: counsellingDataRequest.getClosingRanks()) {
-                    if(counsellingDbData.getRankTypeId() == rankFilter.getFirst() && counsellingDbData.getCloseRank()<=rankFilter.getSecond()) {
-                        add = false;
-                    }
-                }
-                if(add) {
-                    finalData.add(counsellingDbData);
-                }
-            }
-            filteredData = finalData;
+        if (request.getAdvanceCRStart() != 0 && request.getAdvanceCREnd() != 0) {
+            filteredData = filteredData.stream().filter(
+                    entry -> (entry.getRankTypeId() != Constants.RANK_TYPE_ADVANCE || (entry.getRankTypeId() == Constants.RANK_TYPE_ADVANCE && entry.getCloseRank() >= request.getAdvanceCRStart() && entry.getCloseRank() <= request.getAdvanceCREnd()))
+            ).collect(Collectors.toList());
         }
+
+
+        if (request.getMainsCRStart() != 0 && request.getMainsCREnd() != 0) {
+            filteredData = filteredData.stream().filter(
+                    entry -> (entry.getRankTypeId() != Constants.RANK_TYPE_MAINS || (entry.getRankTypeId() == Constants.RANK_TYPE_MAINS && entry.getCloseRank() >= request.getMainsCRStart() && entry.getCloseRank() <= request.getMainsCREnd()))
+            ).collect(Collectors.toList());
+        }
+
+        if (request.getBArchCRStart() != 0 && request.getBArchCREnd() != 0) {
+            filteredData = filteredData.stream().filter(
+                    entry -> (entry.getRankTypeId() != Constants.RANK_TYPE_BARCH || (entry.getRankTypeId() == Constants.RANK_TYPE_BARCH && entry.getCloseRank() >= request.getBArchCRStart() && entry.getCloseRank() <= request.getBArchCREnd()))
+            ).collect(Collectors.toList());
+        }
+
         return filteredData;
     }
 
     private List<CounsellingData> getCounsellingData(List<CounsellingDbData> counsellingDbData) {
-        return counsellingDbData.stream().map(r -> new CounsellingData(1,
-                r.getCollege(),
-                r.getCollegeType(),
-                r.getBranch(),
-                r.getCategory(),
-                r.getGender(),
-                r.getQuota(),
-                r.getYear(),
-                new ThreeTuple<>(r.getRankTypeId(), r.getOpenRank(), r.getCloseRank()))).collect(Collectors.toList());
+        List<CounsellingData> returnList = new ArrayList<>(counsellingDbData.size());
+
+        for (CounsellingDbData dbData: counsellingDbData) {
+            int openingRankAdvance = -1;
+            int openingRankMains = -1;
+            int openingRankBArch = -1;
+            int closingRankAdvance = -1;
+            int closingRankMains = -1;
+            int closingRankBArch = -1;
+
+            if(dbData.getRankTypeId() == Constants.RANK_TYPE_ADVANCE) {
+                openingRankAdvance = dbData.getOpenRank();
+                closingRankAdvance = dbData.getCloseRank();
+            } else if (dbData.getRankTypeId() == Constants.RANK_TYPE_MAINS) {
+                openingRankMains = dbData.getOpenRank();
+                closingRankMains = dbData.getCloseRank();
+            } else if (dbData.getRankTypeId() == Constants.RANK_TYPE_BARCH) {
+                openingRankBArch = dbData.getOpenRank();
+                closingRankBArch = dbData.getCloseRank();
+            }
+            returnList.add(new CounsellingData(1,
+                    dbData.getCollege(),
+                    dbData.getCollegeType(),
+                    dbData.getBranch(),
+                    dbData.getCategory(),
+                    dbData.getGender(),
+                    dbData.getQuota(),
+                    dbData.getYear(),
+                    openingRankAdvance,
+                    openingRankMains,
+                    openingRankBArch,
+                    closingRankAdvance,
+                    closingRankMains,
+                    closingRankBArch
+            ));
+        }
+        return returnList;
     }
 }

@@ -1,6 +1,5 @@
 package com.vedantu.counselling.data.response;
 
-import com.vedantu.counselling.data.model.ThreeTuple;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,5 +14,10 @@ public class CounsellingData {
     private String gender;
     private String quota;
     private int year;
-    private ThreeTuple<Integer, Integer, Integer> openCloseRank;
+    private int openingRankAdvance;
+    private int openingRankMains;
+    private int openingRankBArch;
+    private int closingRankAdvance;
+    private int closingRankMains;
+    private int closingRankBArch;
 }

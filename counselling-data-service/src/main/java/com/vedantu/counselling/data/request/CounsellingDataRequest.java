@@ -1,6 +1,5 @@
 package com.vedantu.counselling.data.request;
 
-import com.vedantu.counselling.data.model.TwoTuple;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,7 +20,12 @@ public class CounsellingDataRequest {
     private List<Integer> branchTagIds;
     private List<Integer> durations;
     private List<Integer> years;
-    private List<TwoTuple<Integer, Integer>> closingRanks;
+    private int mainsCRStart;
+    private int mainsCREnd;
+    private int advanceCRStart;
+    private int advanceCREnd;
+    private int bArchCRStart;
+    private int bArchCREnd;
     private CounsellingDataSortBy counsellingDataSortBy;
     private SortType sortType;
 }

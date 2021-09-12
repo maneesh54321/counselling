@@ -56,37 +56,37 @@ public enum CounsellingDataSortBy {
     ADVANCE_RANK_OPEN{
         @Override
         public Comparator<CounsellingData> getComparator() {
-            return Comparator.comparing(c1 -> c1.getOpenCloseRank().getSecond());
+            return Comparator.comparing(c1 -> c1.getOpeningRankAdvance());
         }
     },
     ADVANCE_RANK_CLOSE{
         @Override
         public Comparator<CounsellingData> getComparator() {
-            return Comparator.comparing(c1 -> c1.getOpenCloseRank().getThird());
+            return Comparator.comparing(c1 -> c1.getClosingRankAdvance());
         }
     },
     MAIN_RANK_OPEN{
         @Override
         public Comparator<CounsellingData> getComparator() {
-            return Comparator.comparing(c1 -> c1.getOpenCloseRank().getSecond());
+            return Comparator.comparing(c1 -> c1.getOpeningRankMains());
         }
     },
     MAIN_RANK_CLOSE{
         @Override
         public Comparator<CounsellingData> getComparator() {
-            return Comparator.comparing(c1 -> c1.getOpenCloseRank().getThird());
+            return Comparator.comparing(c1 -> c1.getClosingRankMains());
         }
     },
-    ARCH_RANK_OPEN{
+    BARCH_RANK_OPEN{
         @Override
         public Comparator<CounsellingData> getComparator() {
-            return Comparator.comparing(c1 -> c1.getOpenCloseRank().getSecond());
+            return Comparator.comparing(c1 -> c1.getOpeningRankBArch());
         }
     },
-    ARCH_RANK_CLOSE{
+    BARCH_RANK_CLOSE{
         @Override
         public Comparator<CounsellingData> getComparator() {
-            return Comparator.comparing(c1 -> c1.getOpenCloseRank().getThird());
+            return Comparator.comparing(c1 -> c1.getClosingRankBArch());
         }
     };
 

@@ -25,4 +25,7 @@ public interface PlacementRepository extends JpaRepository<Placement, Integer> {
             "college_type.name as collegeType from placement placement, college college, college_type college_type " +
             "where placement.college_id = college.id and college.college_type_id = college_type.id", nativeQuery = true)
     List<PlacementRecord> getRecords();
+
+    @Query("SELECT DISTINCT p.year FROM Placement p")
+    List<Integer> findDistinctYears();
 }

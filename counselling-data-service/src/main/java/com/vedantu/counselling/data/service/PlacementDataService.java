@@ -2,19 +2,22 @@ package com.vedantu.counselling.data.service;
 
 
 import com.vedantu.counselling.data.PaginationUtil;
-import com.vedantu.counselling.data.model.PlacementRecord;
+import com.vedantu.counselling.data.model.*;
+import com.vedantu.counselling.data.repository.CollegeRepository;
+import com.vedantu.counselling.data.repository.CollegeTypeRepository;
 import com.vedantu.counselling.data.repository.PlacementRepository;
 import com.vedantu.counselling.data.request.PlacementRequest;
 import com.vedantu.counselling.data.request.SortType;
 import com.vedantu.counselling.data.response.ListResponse;
 import com.vedantu.counselling.data.response.PlacementResponse;
+import com.vedantu.counselling.data.service.mapper.PlacementMetadataMapper;
+import com.vedantu.counselling.data.view.PlacementMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,9 +25,18 @@ public class PlacementDataService {
 
     private final PlacementRepository placementRepository;
 
+    private final CollegeTypeRepository collegeTypeRepository;
+
+    private final CollegeRepository collegeRepository;
+
+
     @Autowired
-    public PlacementDataService(PlacementRepository placementRepository) {
+    public PlacementDataService(PlacementRepository placementRepository,
+                                CollegeRepository collegeRepository,
+                                CollegeTypeRepository collegeTypeRepository) {
         this.placementRepository = placementRepository;
+        this.collegeRepository = collegeRepository;
+        this.collegeTypeRepository = collegeTypeRepository;
     }
 
     public ListResponse<PlacementResponse> getPlacementData(PlacementRequest placementRequest){
@@ -91,5 +103,20 @@ public class PlacementDataService {
                         .ugOrPg(placement.getUgOrPg())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    @Cacheable(value = {"placementMetadata"})
+    public PlacementMetadata getPlacementMetadata() {
+        List<CollegeType> collegeTypes = collegeTypeRepository.findAll();
+        List<College> colleges = collegeRepository.findAll();
+        List<Integer> distinctYears = placementRepository.findDistinctYears();
+        return PlacementMetadataMapper.mapPlacmentMetadata(collegeTypes, colleges, distinctYears, ugPg());
+    }
+
+    private List<String> ugPg(){
+        List<String> ugPgList = new ArrayList<>();
+        ugPgList.add("UG");
+        ugPgList.add("PG");
+        return ugPgList;
     }
 }

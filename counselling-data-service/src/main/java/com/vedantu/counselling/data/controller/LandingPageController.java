@@ -4,6 +4,7 @@ import com.vedantu.counselling.data.exception.InvalidInputException;
 import com.vedantu.counselling.data.service.CounsellingDataService;
 import com.vedantu.counselling.data.service.DownloadService;
 import com.vedantu.counselling.data.service.SummaryDataService;
+import com.vedantu.counselling.data.util.Utils;
 import com.vedantu.counselling.data.view.ResponseStatus;
 import com.vedantu.counselling.data.view.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,9 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.activation.MimetypesFileTypeMap;
 import java.util.Objects;
 
 @RestController
@@ -28,8 +27,6 @@ public class LandingPageController {
     private final SummaryDataService summaryDataService;
 
     private final DownloadService downloadService;
-
-    private static final MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
 
     @Autowired
     public LandingPageController(
@@ -64,21 +61,12 @@ public class LandingPageController {
 
         return ResponseEntity.ok()
                 .contentLength(downloadFileByteArrayResource.contentLength())
-                .header(HttpHeaders.CONTENT_TYPE, getContentType(downloadedFile))
+                .header(HttpHeaders.CONTENT_TYPE, Utils.getContentTypeFromFileName(downloadedFile.getName()))
                 .header(
                         HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=" + downloadedFile.getName()
                 )
                 .body(downloadFileByteArrayResource);
-    }
-
-    private String getContentType(DownloadedFile downloadedFile) {
-        String type = StringUtils.getFilenameExtension(downloadedFile.getName());
-        String contentType = fileTypeMap.getContentType(type);
-        if (contentType == null) {
-            contentType = "application/octet-stream";
-        }
-        return contentType;
     }
 
     @PostMapping("/files/upload")

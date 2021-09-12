@@ -1,8 +1,9 @@
 package com.vedantu.counselling.data.service;
 
 
-import com.vedantu.counselling.data.PaginationUtil;
-import com.vedantu.counselling.data.model.*;
+import com.vedantu.counselling.data.model.College;
+import com.vedantu.counselling.data.model.CollegeType;
+import com.vedantu.counselling.data.model.PlacementRecord;
 import com.vedantu.counselling.data.repository.CollegeRepository;
 import com.vedantu.counselling.data.repository.CollegeTypeRepository;
 import com.vedantu.counselling.data.repository.PlacementRepository;
@@ -11,13 +12,16 @@ import com.vedantu.counselling.data.request.SortType;
 import com.vedantu.counselling.data.response.ListResponse;
 import com.vedantu.counselling.data.response.PlacementResponse;
 import com.vedantu.counselling.data.service.mapper.PlacementMetadataMapper;
+import com.vedantu.counselling.data.util.PaginationUtil;
 import com.vedantu.counselling.data.view.PlacementMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service

@@ -1,6 +1,6 @@
 package com.vedantu.counselling.data.service;
 
-import com.vedantu.counselling.data.PaginationUtil;
+import com.vedantu.counselling.data.util.PaginationUtil;
 import com.vedantu.counselling.data.model.*;
 import com.vedantu.counselling.data.repository.*;
 import com.vedantu.counselling.data.request.CounsellingDataRequest;

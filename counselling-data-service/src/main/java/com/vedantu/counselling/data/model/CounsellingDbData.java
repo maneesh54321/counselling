@@ -1,6 +1,7 @@
 package com.vedantu.counselling.data.model;
 
 public interface CounsellingDbData {
+    int getId();
     String getCollege();
     int getCollegeId();
     String getCollegeType();

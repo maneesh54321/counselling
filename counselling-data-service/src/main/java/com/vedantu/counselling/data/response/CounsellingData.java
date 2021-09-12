@@ -2,10 +2,13 @@ package com.vedantu.counselling.data.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @AllArgsConstructor
 @Getter
+@Setter
 public class CounsellingData {
+    private int id;
     private int distance;
     private String college;
     private String collegeType;

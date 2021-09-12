@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,6 +44,8 @@ public class CounsellingDataService {
 
     private final CityRepository cityRepository;
 
+    private final DistanceMappingRepository distanceMappingRepository;
+
     private final int maxDistance;
 
     @Autowired
@@ -50,7 +53,7 @@ public class CounsellingDataService {
                                   QuotaRepository quotaRepository, CollegeTypeRepository collegeTypeRepository,
                                   CollegeRepository collegeRepository, BranchTagRepository branchTagRepository,
                                   BranchRepository branchrepository, RankRepository rankRepository,
-                                  CityRepository cityRepository,
+                                  CityRepository cityRepository, DistanceMappingRepository distanceMappingRepository,
                                   @Value("${data.maxDistance}") int maxDistance) {
         this.categoryRepository = categoryRepository;
         this.genderRepository = genderRepository;
@@ -61,6 +64,7 @@ public class CounsellingDataService {
         this.branchrepository = branchrepository;
         this.rankRepository = rankRepository;
         this.cityRepository = cityRepository;
+        this.distanceMappingRepository = distanceMappingRepository;
         this.maxDistance = maxDistance;
     }
 
@@ -94,6 +98,8 @@ public class CounsellingDataService {
 
         List<CounsellingData> finalCounsellingData = getCounsellingData(filterDataForRequest(allData, request));
 
+        finalCounsellingData = mapAndApplyDistanceFilter(finalCounsellingData, request);
+
         Comparator<CounsellingData> comparator = request.getSortType().equals(SortType.ASC) ? request.getCounsellingDataSortBy().getComparator() : request.getCounsellingDataSortBy().getComparator().reversed();
         finalCounsellingData.sort(comparator);
 
@@ -101,6 +107,18 @@ public class CounsellingDataService {
 
         return new CounsellingDataResponse(size,
                 PaginationUtil.getPaginatedList(finalCounsellingData, size, request.getPageSize(), request.getPageNumber()));
+    }
+
+    private List<CounsellingData>  mapAndApplyDistanceFilter(List<CounsellingData> inputList, CounsellingDataRequest request) {
+        List<DistanceMapping> allDistanceFromLocation = distanceMappingRepository.findByCityId(request.getCityId());
+        Map<String, Integer> collegeDistance = allDistanceFromLocation.stream().collect(Collectors.toMap(e->e.getCollege().getName(), DistanceMapping::getDistance));
+
+        inputList.forEach(e -> e.setDistance(collegeDistance.get(e.getCollege())));
+
+        if (request.getDistanceLimit() != 0)
+            return inputList.stream().filter(entry -> entry.getDistance() <= request.getDistanceLimit()).collect(Collectors.toList());
+
+        return inputList;
     }
 
     private List<CounsellingDbData> filterDataForRequest(List<CounsellingDbData> allData, CounsellingDataRequest request) {
@@ -180,7 +198,7 @@ public class CounsellingDataService {
                 openingRankBArch = dbData.getOpenRank();
                 closingRankBArch = dbData.getCloseRank();
             }
-            returnList.add(new CounsellingData(1,
+            returnList.add(new CounsellingData(dbData.getId(),1,
                     dbData.getCollege(),
                     dbData.getCollegeType(),
                     dbData.getBranch(),

@@ -19,7 +19,7 @@ public interface RankRepository extends JpaRepository<Rank, Integer> {
     @Query("SELECT rt as rankType, MAX(r.closingRank) as maxClosingRank from Rank r JOIN r.rankType rt GROUP BY rt")
     List<MaxClosingRankByRankType> findMaxClosingRankByRankType();
 
-    @Query(value = "SELECT COL.NAME AS college, COL.ID as collegeId, CT.NAME as collegeType, CT.ID as collegeTypeId, B.NAME as branch, BT.ID as branchTagId, CAT.NAME as category, CAT.ID as categoryId, \n" +
+    @Query(value = "SELECT R.ID, COL.NAME AS college, COL.ID as collegeId, CT.NAME as collegeType, CT.ID as collegeTypeId, B.NAME as branch, BT.ID as branchTagId, CAT.NAME as category, CAT.ID as categoryId, \n" +
             "GEN.NAME as gender, GEN.ID as genderId, Q.NAME quota, Q.ID as quotaId, R.YEAR as year, R.RANK_TYPE_ID as rankTypeId, R.OPEN_RANK as openRank, R.CLOSING_RANK as closeRank, B.DURATION AS DURATION \n" +
             "FROM RANK R\n" +
             "INNER JOIN CATEGORY CAT ON R.CATEGORY_ID = CAT.ID\n" +

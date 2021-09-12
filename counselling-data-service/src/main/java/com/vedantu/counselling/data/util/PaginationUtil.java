@@ -1,4 +1,4 @@
-package com.vedantu.counselling.data;
+package com.vedantu.counselling.data.util;
 
 import com.vedantu.counselling.data.exception.InvalidInputException;
 

@@ -6,6 +6,7 @@ import com.vedantu.counselling.data.repository.CounsellingDataFileRepository;
 import com.vedantu.counselling.data.view.DownloadedFile;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,6 +32,7 @@ public class DownloadService {
         );
     }
 
+    @CacheEvict(value="summary", allEntries = true)
     public void uploadFile(String fileDescription, MultipartFile fileToUpload) throws InvalidInputException {
         try {
             String fileName = fileToUpload.getOriginalFilename();

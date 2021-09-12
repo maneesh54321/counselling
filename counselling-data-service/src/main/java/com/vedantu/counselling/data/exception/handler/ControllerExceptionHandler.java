@@ -30,38 +30,42 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = { MaxUploadSizeExceededException.class })
-    public ResponseEntity<Object> handleMaxUploadSizeExceededException(
+    public ResponseEntity<Response<String>> handleMaxUploadSizeExceededException(
             Exception ex, WebRequest request) {
         log.error(ex.getMessage(), ex);
         Response<String> errorResponse = new Response<>(ResponseStatus.FAILED, MAX_ALLOWED_UPLOAD_SIZE_ERROR);
-        return handleExceptionInternal(ex, errorResponse,
-                new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+        return createExceptionResponse(errorResponse,
+                new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = { InvalidInputException.class })
-    public ResponseEntity<Object> handleInputValidationException(
+    public ResponseEntity<Response<String>> handleInputValidationException(
             Exception ex, WebRequest request) {
         Response<String> errorResponse = new Response<>(ResponseStatus.FAILED, ex.getMessage());
-        return handleExceptionInternal(ex, errorResponse,
-                new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+        return createExceptionResponse(errorResponse,
+                new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = { Exception.class })
-    public ResponseEntity<Object> handleCheckedException(
+    public ResponseEntity<Response<String>> handleCheckedException(
             Exception ex, WebRequest request) {
         Response<String> errorResponse = new Response<>(ResponseStatus.FAILED, ex.getMessage());
-        return handleExceptionInternal(ex, errorResponse,
-                new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+        return createExceptionResponse(errorResponse,
+                new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(value = { RuntimeException.class })
-    public ResponseEntity<Object> handleRuntimeException(
+    public ResponseEntity<Response<String>> handleRuntimeException(
             Exception ex, WebRequest request) {
         Response<String> errorResponse = new Response<>(
                 ResponseStatus.FAILED,
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()
         );
-        return handleExceptionInternal(ex, errorResponse,
-                new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+        return createExceptionResponse(errorResponse,
+                new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    private <U> ResponseEntity<U> createExceptionResponse(U body, HttpHeaders headers, HttpStatus status){
+        return new ResponseEntity<>(body, headers, status);
     }
 }

@@ -9,7 +9,6 @@ import com.vedantu.counselling.data.view.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -83,12 +82,12 @@ public class LandingPageController {
     }
 
     @PostMapping("/files/upload")
-    public ResponseEntity<String> uploadFile(
+    public Response<String> uploadFile(
             @RequestParam("file") MultipartFile file,
             @RequestParam("description") String description
     ) throws InvalidInputException {
         downloadService.uploadFile(description, file);
-        return ResponseEntity.status(HttpStatus.OK).body("File uploaded successfully!");
+        return new Response<>(ResponseStatus.SUCCESS, "File uploaded successfully!");
     }
 
 }

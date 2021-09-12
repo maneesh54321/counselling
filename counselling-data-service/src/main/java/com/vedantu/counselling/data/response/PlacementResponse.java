@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 @Data
 @Builder
 public class PlacementResponse {
+    private int id;
     private String college;
     private String collegeType;
     private String ugOrPg;

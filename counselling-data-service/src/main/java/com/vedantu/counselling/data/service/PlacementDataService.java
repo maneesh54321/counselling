@@ -89,6 +89,7 @@ public class PlacementDataService {
     private List<PlacementResponse> getResponsePlacements(List<PlacementRecord> placementList) {
         return placementList.stream().map(placement -> PlacementResponse
                         .builder()
+                        .id(placement.getId())
                         .totalStudents(placement.getTotalStudents() == null ? 0:placement.getTotalStudents())
                         .studentPlacedPercent(placement.getStudentPlacedPercentage()
                                 == null ? BigDecimal.ZERO:placement.getStudentPlacedPercentage())

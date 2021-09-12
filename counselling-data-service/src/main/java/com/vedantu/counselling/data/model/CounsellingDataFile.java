@@ -5,41 +5,47 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.Objects;
 
-@NoArgsConstructor
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class CounsellingDataFile {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "counselling_data_file_id_generator")
-    @SequenceGenerator(name="counselling_data_file_id_generator", sequenceName = "counselling_data_file_id_seq", allocationSize = 1)
+    @SequenceGenerator(
+            name="counselling_data_file_id_generator",
+            sequenceName = "counselling_data_file_id_seq", allocationSize = 1
+    )
     private int id;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String description;
-
-    @Column(nullable = false)
-    private String type;
 
     @Basic
     @Column(nullable = false)
     private byte[] content;
+
+    public CounsellingDataFile(String name, String description, byte[] content) {
+        this.name = name;
+        this.description = description;
+        this.content = content;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof CounsellingDataFile)) return false;
         CounsellingDataFile that = (CounsellingDataFile) o;
-        return getName().equals(that.getName()) && getDescription().equals(that.getDescription()) && getType().equals(that.getType());
+        return getName().equals(that.getName()) && getDescription().equals(that.getDescription());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getDescription(), getType());
+        return Objects.hash(getName(), getDescription());
     }
 }

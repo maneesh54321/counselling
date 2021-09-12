@@ -9,9 +9,12 @@ import com.vedantu.counselling.data.view.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.activation.MimetypesFileTypeMap;
 import java.util.Objects;
@@ -27,8 +30,14 @@ public class LandingPageController {
 
     private final DownloadService downloadService;
 
+    private static final MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
+
     @Autowired
-    public LandingPageController(CounsellingDataService counsellingDataService, SummaryDataService summaryDataService, DownloadService downloadService) {
+    public LandingPageController(
+            CounsellingDataService counsellingDataService,
+            SummaryDataService summaryDataService,
+            DownloadService downloadService
+    ) {
         this.counsellingDataService = counsellingDataService;
         this.summaryDataService = summaryDataService;
         this.downloadService = downloadService;
@@ -40,13 +49,14 @@ public class LandingPageController {
     }
 
     @GetMapping(value = "/landing-page-info", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response<SummaryData> getLandingPageInfo() throws Exception {
+    public Response<SummaryData> getLandingPageInfo() {
         return new Response<>(ResponseStatus.SUCCESS, summaryDataService.getSummary());
     }
 
-    @GetMapping(value = "/download/{fileId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable("fileId") Integer fileId) throws InvalidInputException {
-        if(Objects.isNull(fileId)){
+    @GetMapping(value = "/files/download/{fileId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable("fileId") Integer fileId)
+            throws InvalidInputException {
+        if (Objects.isNull(fileId)) {
             throw new InvalidInputException("File id can not be null!!");
         }
 
@@ -56,17 +66,29 @@ public class LandingPageController {
         return ResponseEntity.ok()
                 .contentLength(downloadFileByteArrayResource.contentLength())
                 .header(HttpHeaders.CONTENT_TYPE, getContentType(downloadedFile))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + downloadedFile.getName() + "." + downloadedFile.getType())
-                             .body(downloadFileByteArrayResource);
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=" + downloadedFile.getName()
+                )
+                .body(downloadFileByteArrayResource);
     }
 
     private String getContentType(DownloadedFile downloadedFile) {
-        MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
-        String contentType = fileTypeMap.getContentType(downloadedFile.getName()+downloadedFile.getType());
-        if(contentType == null){
+        String type = StringUtils.getFilenameExtension(downloadedFile.getName());
+        String contentType = fileTypeMap.getContentType(type);
+        if (contentType == null) {
             contentType = "application/octet-stream";
         }
         return contentType;
+    }
+
+    @PostMapping("/files/upload")
+    public ResponseEntity<String> uploadFile(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("description") String description
+    ) throws InvalidInputException {
+        downloadService.uploadFile(description, file);
+        return ResponseEntity.status(HttpStatus.OK).body("File uploaded successfully!");
     }
 
 }

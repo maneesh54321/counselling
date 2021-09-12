@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @CrossOrigin
 public class PlacementViewController {
 
-    private PlacementDataService placementDataService;
+    private final PlacementDataService placementDataService;
 
     @Autowired
     public PlacementViewController(PlacementDataService placementDataService) {

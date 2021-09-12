@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Service
 public class PlacementDataService {
 
-    private PlacementRepository placementRepository;
+    private final PlacementRepository placementRepository;
 
     @Autowired
     public PlacementDataService(PlacementRepository placementRepository) {

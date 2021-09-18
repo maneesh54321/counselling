@@ -54,16 +54,21 @@ public class PlacementDataService {
             return new ListResponse<>(Collections.emptyList(), 0);
         }
 
-        List<PlacementRecord> allRecords = placementRepository.getRecords();
+        List<PlacementRecord> allRecords = getPlacementRepositoryRecords();
+        log.debug("Total unfiltered placement records are {}", allRecords.size());
+
         List<PlacementRecord> filteredRecords = filteredRecords(allRecords, placementRequest);
         List<PlacementRecord> sortedRecords = sortRecords(filteredRecords, placementRequest);
-
         log.debug("Total sorted placement records after filtering data request are {}", sortedRecords.size());
 
         return new ListResponse<>(getResponsePlacements(
                 PaginationUtil.getPaginatedList(filteredRecords, sortedRecords.size(), placementRequest.getPageSize(),
                         placementRequest.getPageNumber())),
                 sortedRecords.size());
+    }
+
+    public List<PlacementRecord> getPlacementRepositoryRecords() {
+        return placementRepository.getRecords();
     }
 
     private List<PlacementRecord> sortRecords(List<PlacementRecord> filteredRecords, PlacementRequest placementRequest) {
@@ -124,12 +129,18 @@ public class PlacementDataService {
     @Cacheable(value = {"placementMetadata"})
     public PlacementMetadata getPlacementMetadata() {
         List<CollegeType> collegeTypes = collegeTypeRepository.findAll();
+        log.info("Number college type for PlacementMetadata {}", collegeTypes.size());
+
         List<College> colleges = collegeRepository.findAll();
+        log.info("Number of college for PlacementMetadata {}", colleges.size());
+
         List<Integer> distinctYears = placementRepository.findDistinctYears();
-        return PlacementMetadataMapper.mapPlacementMetadata(collegeTypes, colleges, distinctYears, ugPg());
+        log.info("Number of years for PlacementMetadata {}", distinctYears.size());
+
+        return PlacementMetadataMapper.mapPlacementMetadata(collegeTypes, colleges, distinctYears, ugOrPg());
     }
 
-    private List<String> ugPg(){
+    private List<String> ugOrPg(){
         List<String> ugPgList = new ArrayList<>();
         ugPgList.add("UG");
         ugPgList.add("PG");

@@ -70,20 +70,40 @@ public class CounsellingDataService {
     @Cacheable(value = {"counsellingDataMetadata"})
     public CounsellingDataMetadata getCounsellingDataMetadata() {
         List<Category> categories = categoryRepository.findAll();
+        log.info("Number of categories for counsellingDataMetadata {}", categories.size());
+
         List<Gender> genders = genderRepository.findAll();
+        log.info("Number of genders for counsellingDataMetadata {}", genders.size());
+
         List<Quota> quotas = quotaRepository.findAll();
+        log.info("Number of quotas for counsellingDataMetadata {}", quotas.size());
+
         List<CollegeType> collegeTypes = collegeTypeRepository.findAll();
+        log.info("Number of collegeTypes for counsellingDataMetadata {}", collegeTypes.size());
+
         List<College> colleges = collegeRepository.findAll();
+        log.info("Number of colleges for counsellingDataMetadata {}", colleges.size());
+
         List<BranchTag> branchTags = branchTagRepository.findAll();
+        log.info("Number of branchTags for counsellingDataMetadata {}", branchTags.size());
+
         List<Integer> distinctDurations = branchrepository.findDistinctDurations();
+        log.info("Number of distinctDurations for counsellingDataMetadata {}", distinctDurations.size());
+
         List<Integer> distinctYears = rankRepository.findDistinctYears();
+        log.info("Number of distinctYears for counsellingDataMetadata {}", distinctYears.size());
+
         List<MaxClosingRankByRankType> maxClosingRankByRankTypes = rankRepository.findMaxClosingRankByRankType();
+        log.info("Number of maxClosingRankByRankTypes for counsellingDataMetadata {}", maxClosingRankByRankTypes.size());
+
         return CounsellingDataMapper.mapCounsellingDataMetadata(categories, genders, quotas, collegeTypes, colleges, branchTags, distinctDurations, distinctYears, maxDistance, maxClosingRankByRankTypes);
     }
 
     @Cacheable(value = {"cities"})
     public CityData getAllCities() {
         List<City> cities = cityRepository.findAll();
+        log.info("Number of cities {}", cities.size());
+
         return CounsellingDataMapper.mapCityData(cities);
     }
 
@@ -96,6 +116,7 @@ public class CounsellingDataService {
         }
 
         List<CounsellingDbData> allData = rankRepository.findCounsellingDbData();
+        log.debug("Total unfiltered Counselling Data records are {}", allData.size());
 
         List<CounsellingData> finalCounsellingData = getCounsellingData(filterDataForRequest(allData, request));
 

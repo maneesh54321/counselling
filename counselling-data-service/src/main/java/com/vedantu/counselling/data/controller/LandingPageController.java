@@ -41,16 +41,13 @@ public class LandingPageController {
     public LandingPageController(
             CounsellingDataService counsellingDataService,
             SummaryDataService summaryDataService,
-            DownloadService downloadService, AccessTrackerService accessTrackerService
             DownloadService downloadService,
+            AccessTrackerService accessTrackerService,
             AuthService authService) {
         this.counsellingDataService = counsellingDataService;
         this.summaryDataService = summaryDataService;
         this.downloadService = downloadService;
         this.accessTrackerService = accessTrackerService;
-        this.counsellingDataService = counsellingDataService;
-        this.summaryDataService = summaryDataService;
-        this.downloadService = downloadService;
         this.authService = authService;
     }
 

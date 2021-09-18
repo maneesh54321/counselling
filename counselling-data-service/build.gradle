@@ -23,6 +23,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	implementation 'org.springdoc:springdoc-openapi-ui:1.5.10'
 	compileOnly 'org.projectlombok:lombok'
+	implementation 'com.itextpdf:itextpdf:5.5.13.2'
 	runtimeOnly 'org.postgresql:postgresql'
 	implementation 'org.apache.tomcat:tomcat-jdbc'
 	annotationProcessor 'org.projectlombok:lombok'

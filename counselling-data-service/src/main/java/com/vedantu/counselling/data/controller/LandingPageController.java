@@ -6,7 +6,6 @@ import com.vedantu.counselling.data.response.SummaryData;
 import com.vedantu.counselling.data.service.CounsellingDataService;
 import com.vedantu.counselling.data.service.DownloadService;
 import com.vedantu.counselling.data.service.SummaryDataService;
-import com.vedantu.counselling.data.util.PathConstants;
 import com.vedantu.counselling.data.util.Utils;
 import com.vedantu.counselling.data.response.ResponseStatus;
 import com.vedantu.counselling.data.response.view.*;
@@ -22,7 +21,7 @@ import java.util.Objects;
 
 @RestController
 @CrossOrigin
-@RequestMapping(PathConstants.COUNSELLINGAPP)
+@RequestMapping("/landing-page")
 public class LandingPageController {
 
     private final CounsellingDataService counsellingDataService;
@@ -42,12 +41,12 @@ public class LandingPageController {
         this.downloadService = downloadService;
     }
 
-    @GetMapping(value = "/get-all-city", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/city/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response<CityData> getAllCities() {
         return new Response<>(ResponseStatus.SUCCESS, counsellingDataService.getAllCities());
     }
 
-    @GetMapping(value = "/landing-page-info", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/summary", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response<SummaryData> getLandingPageInfo() {
         return new Response<>(ResponseStatus.SUCCESS, summaryDataService.getSummary());
     }

@@ -18,8 +18,8 @@ public class RequestLoggingFilterConfig {
         filter.setIncludePayload(true);
         filter.setMaxPayloadLength(10000);
         filter.setIncludeHeaders(false);
-        filter.setBeforeMessagePrefix("REQUEST START");
-        filter.setAfterMessagePrefix("REQUEST END and REQUEST DATA was : ");
+        filter.setBeforeMessagePrefix("REQUEST START: ");
+        filter.setAfterMessagePrefix("REQUEST END and REQUEST DATA was: ");
         return filter;
     }
 }

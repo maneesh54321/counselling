@@ -3,6 +3,7 @@ package com.vedantu.counselling.data.controller;
 import com.vedantu.counselling.data.exception.InvalidInputException;
 import com.vedantu.counselling.data.response.Response;
 import com.vedantu.counselling.data.response.SummaryData;
+import com.vedantu.counselling.data.service.AccessTrackerService;
 import com.vedantu.counselling.data.service.CounsellingDataService;
 import com.vedantu.counselling.data.service.DownloadService;
 import com.vedantu.counselling.data.service.SummaryDataService;
@@ -30,19 +31,23 @@ public class LandingPageController {
 
     private final DownloadService downloadService;
 
+    private final AccessTrackerService accessTrackerService;
+
     @Autowired
     public LandingPageController(
             CounsellingDataService counsellingDataService,
             SummaryDataService summaryDataService,
-            DownloadService downloadService
+            DownloadService downloadService, AccessTrackerService accessTrackerService
     ) {
         this.counsellingDataService = counsellingDataService;
         this.summaryDataService = summaryDataService;
         this.downloadService = downloadService;
+        this.accessTrackerService = accessTrackerService;
     }
 
     @GetMapping(value = "/cities", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response<CityData> getAllCities() {
+        accessTrackerService.noteNewAccess();
         return new Response<>(ResponseStatus.SUCCESS, counsellingDataService.getAllCities());
     }
 

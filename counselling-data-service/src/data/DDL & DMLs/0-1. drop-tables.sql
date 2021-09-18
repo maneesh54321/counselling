@@ -1,0 +1,15 @@
+DROP TABLE public.counselling_data_file;
+DROP TABLE public.access_tracker;
+DROP TABLE public.rank;
+DROP TABLE public.distance_mapping;
+DROP TABLE public.placement;
+DROP TABLE public.college_branch;
+DROP TABLE public.college;
+DROP TABLE public.branch;
+DROP TABLE public.branch_tag;
+DROP TABLE public.city;
+DROP TABLE public.college_type;
+DROP TABLE public.rank_type;
+DROP TABLE public.quota;
+DROP TABLE public.gender;
+DROP TABLE public.category;

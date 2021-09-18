@@ -12,18 +12,17 @@ import com.vedantu.counselling.data.service.mapper.CounsellingDataMapper;
 import com.vedantu.counselling.data.util.PaginationUtil;
 import com.vedantu.counselling.data.response.view.CityData;
 import com.vedantu.counselling.data.response.metadata.CounsellingDataMetadata;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class CounsellingDataService {
 
     private final CategoryRepository categoryRepository;
@@ -89,9 +88,11 @@ public class CounsellingDataService {
     }
 
     public CounsellingDataResponse getCounsellingDataFor(CounsellingDataRequest request) {
+        log.debug("Counselling data request for {}", request);
 
         if (request == null) {
-            return new CounsellingDataResponse();
+            log.info("Request is null hence no records in response");
+            return new CounsellingDataResponse(0, Collections.emptyList());
         }
 
         List<CounsellingDbData> allData = rankRepository.findCounsellingDbData();
@@ -104,7 +105,7 @@ public class CounsellingDataService {
         finalCounsellingData.sort(comparator);
 
         int size = finalCounsellingData.size();
-
+        log.debug("Total sorted counselling records after filtering data request are {}", size);
         return new CounsellingDataResponse(size,
                 PaginationUtil.getPaginatedList(finalCounsellingData, size, request.getPageSize(), request.getPageNumber()));
     }
@@ -160,7 +161,6 @@ public class CounsellingDataService {
                     entry -> (entry.getRankTypeId() != Constants.RANK_TYPE_ADVANCE || (entry.getRankTypeId() == Constants.RANK_TYPE_ADVANCE && entry.getCloseRank() >= request.getAdvanceCRStart() && entry.getCloseRank() <= request.getAdvanceCREnd()))
             ).collect(Collectors.toList());
         }
-
 
         if (request.getMainsCRStart() != 0 && request.getMainsCREnd() != 0) {
             filteredData = filteredData.stream().filter(

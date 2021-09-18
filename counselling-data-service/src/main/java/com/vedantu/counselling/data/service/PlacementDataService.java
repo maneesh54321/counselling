@@ -14,17 +14,20 @@ import com.vedantu.counselling.data.response.PlacementData;
 import com.vedantu.counselling.data.service.mapper.PlacementMetadataMapper;
 import com.vedantu.counselling.data.util.PaginationUtil;
 import com.vedantu.counselling.data.response.metadata.PlacementMetadata;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class PlacementDataService {
 
     private final PlacementRepository placementRepository;
@@ -44,10 +47,18 @@ public class PlacementDataService {
     }
 
     public ListResponse<PlacementData> getPlacementData(PlacementRequest placementRequest){
+        log.debug("Placement data request for {}", placementRequest);
+
+        if (placementRequest == null) {
+            log.info("Request is null hence no records in response");
+            return new ListResponse<>(Collections.emptyList(), 0);
+        }
 
         List<PlacementRecord> allRecords = placementRepository.getRecords();
         List<PlacementRecord> filteredRecords = filteredRecords(allRecords, placementRequest);
         List<PlacementRecord> sortedRecords = sortRecords(filteredRecords, placementRequest);
+
+        log.debug("Total sorted placement records after filtering data request are {}", sortedRecords.size());
 
         return new ListResponse<>(getResponsePlacements(
                 PaginationUtil.getPaginatedList(filteredRecords, sortedRecords.size(), placementRequest.getPageSize(),

@@ -3,11 +3,13 @@ package com.vedantu.counselling.data.request;
 import com.vedantu.counselling.data.Constants;
 import com.vedantu.counselling.data.model.PlacementRecord;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.Comparator;
 import java.util.List;
 
 @Data
+@ToString
 public class PlacementRequest {
     private List<Integer> collegeIds; //optional
     private List<Integer> collegeTagIds; //optional

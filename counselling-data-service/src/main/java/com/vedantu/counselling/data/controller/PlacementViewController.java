@@ -8,6 +8,7 @@ import com.vedantu.counselling.data.util.PathConstants;
 import com.vedantu.counselling.data.response.metadata.PlacementMetadata;
 import com.vedantu.counselling.data.response.Response;
 import com.vedantu.counselling.data.response.ResponseStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(PathConstants.COUNSELLINGAPP)
 @CrossOrigin
+@Slf4j
 public class PlacementViewController {
 
     private final PlacementDataService placementDataService;

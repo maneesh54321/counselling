@@ -4,12 +4,14 @@ import com.vedantu.counselling.data.Constants;
 import com.vedantu.counselling.data.response.CounsellingData;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Comparator;
 import java.util.List;
 
 @Getter
 @Setter
+@ToString
 public class CounsellingDataRequest {
     private List<Integer> collegeIds;
     private List<Integer> collegeTagIds;

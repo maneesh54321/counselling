@@ -41,6 +41,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = { InvalidInputException.class })
     public ResponseEntity<Response<String>> handleInputValidationException(
             Exception ex, WebRequest request) {
+        log.error(ex.getMessage(), ex);
         Response<String> errorResponse = new Response<>(ResponseStatus.FAILED, ex.getMessage());
         return createExceptionResponse(errorResponse,
                 new HttpHeaders(), HttpStatus.BAD_REQUEST);
@@ -49,6 +50,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = { Exception.class })
     public ResponseEntity<Response<String>> handleCheckedException(
             Exception ex, WebRequest request) {
+        log.error(ex.getMessage(), ex);
         Response<String> errorResponse = new Response<>(ResponseStatus.FAILED, ex.getMessage());
         return createExceptionResponse(errorResponse,
                 new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -57,6 +59,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = { RuntimeException.class })
     public ResponseEntity<Response<String>> handleRuntimeException(
             Exception ex, WebRequest request) {
+        log.error(ex.getMessage(), ex);
         Response<String> errorResponse = new Response<>(
                 ResponseStatus.FAILED,
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()

@@ -55,6 +55,7 @@ public class SummaryDataService {
     }
 
     private List<Video> getAllVideos() {
+        log.debug("Processing All videos request");
         try (BufferedReader videoDescriptionReader = new BufferedReader(new InputStreamReader(new ClassPathResource(VIDEOS_DESCRIPTION_URI).getInputStream()))) {
             List<Video> videos =  videoDescriptionReader.lines()
                     .map(videoDescription -> {
@@ -79,6 +80,7 @@ public class SummaryDataService {
                 log.error(errorMessage);
                 throw new RuntimeException(errorMessage);
             }
+            log.debug("Response contains {} videos", videos.size());
             return videos;
         } catch (IOException e ) {
             log.error("Exception occurred while reading videos description file!!!", e);

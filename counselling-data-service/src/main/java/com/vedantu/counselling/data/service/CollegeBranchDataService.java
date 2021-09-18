@@ -14,6 +14,7 @@ import com.vedantu.counselling.data.service.mapper.CollegeBranchMetaDataMapper;
 import com.vedantu.counselling.data.util.PaginationUtil;
 import com.vedantu.counselling.data.util.SequenceGenerator;
 import com.vedantu.counselling.data.response.metadata.CollegeBranchMetaData;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class CollegeBranchDataService {
 
     private final CollegeRepository collegeRepository;
@@ -47,9 +49,11 @@ public class CollegeBranchDataService {
     }
 
     public ListResponse<CollegeBranchResponse> getCollegeBranchDataFor(CollegeBranchRequest request) {
+        log.debug("College Branch data request for {}", request);
 
         if (request == null) {
-            return new ListResponse<>(new LinkedList<>(), 0);
+            log.info("Request is null hence no records in response");
+            return new ListResponse<>(Collections.emptyList(), 0);
         }
 
         List<CollegeBranchDbData> allCollegeBranch = collegeRepository.findAllCollegeBranch();
@@ -60,7 +64,7 @@ public class CollegeBranchDataService {
         finalCollegeBranchResponseData.sort(comparator);
 
         int returnCount = finalCollegeBranchResponseData.size();
-
+        log.debug("Total filtered College Branch records are {}", returnCount);
         return new ListResponse<>(PaginationUtil.getPaginatedList(finalCollegeBranchResponseData, returnCount, request.getPageSize(), request.getPageNumber()), returnCount);
     }
 

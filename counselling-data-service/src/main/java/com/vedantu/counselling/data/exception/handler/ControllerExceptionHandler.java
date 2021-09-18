@@ -1,5 +1,6 @@
 package com.vedantu.counselling.data.exception.handler;
 
+import com.vedantu.counselling.data.exception.AuthenticationException;
 import com.vedantu.counselling.data.exception.InvalidInputException;
 import com.vedantu.counselling.data.response.Response;
 import com.vedantu.counselling.data.response.ResponseStatus;
@@ -27,6 +28,15 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
                 "The file exceeds maximum upload size of %s.",
                 maxAllowedUploadSize
         );
+    }
+
+    @ExceptionHandler(value = { AuthenticationException.class })
+    public ResponseEntity<Response<String>> handleAuthenticationException(
+            Exception ex, WebRequest request) {
+        log.error(ex.getMessage(), ex);
+        Response<String> errorResponse = new Response<>(ResponseStatus.FAILED, ex.getMessage());
+        return createExceptionResponse(errorResponse,
+                new HttpHeaders(), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(value = { MaxUploadSizeExceededException.class })

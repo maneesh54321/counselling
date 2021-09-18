@@ -1,8 +1,10 @@
 package com.vedantu.counselling.data.controller;
 
+import com.vedantu.counselling.data.exception.AuthenticationException;
 import com.vedantu.counselling.data.exception.InvalidInputException;
 import com.vedantu.counselling.data.response.Response;
 import com.vedantu.counselling.data.response.SummaryData;
+import com.vedantu.counselling.data.service.AuthService;
 import com.vedantu.counselling.data.service.CounsellingDataService;
 import com.vedantu.counselling.data.service.DownloadService;
 import com.vedantu.counselling.data.service.SummaryDataService;
@@ -30,15 +32,18 @@ public class LandingPageController {
 
     private final DownloadService downloadService;
 
+    private final AuthService authService;
+
     @Autowired
     public LandingPageController(
             CounsellingDataService counsellingDataService,
             SummaryDataService summaryDataService,
-            DownloadService downloadService
-    ) {
+            DownloadService downloadService,
+            AuthService authService) {
         this.counsellingDataService = counsellingDataService;
         this.summaryDataService = summaryDataService;
         this.downloadService = downloadService;
+        this.authService = authService;
     }
 
     @GetMapping(value = "/cities", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -74,8 +79,10 @@ public class LandingPageController {
     @PostMapping("/files/upload")
     public Response<String> uploadFile(
             @RequestParam("file") MultipartFile file,
-            @RequestParam("description") String description
-    ) throws InvalidInputException {
+            @RequestParam("description") String description,
+            @RequestParam("key") String password
+    ) throws InvalidInputException, AuthenticationException {
+        authService.authenticate(password);
         downloadService.uploadFile(description, file);
         return new Response<>(ResponseStatus.SUCCESS, "File uploaded successfully!");
     }

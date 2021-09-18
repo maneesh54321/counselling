@@ -7,6 +7,7 @@ import com.vedantu.counselling.data.response.ListResponse;
 import com.vedantu.counselling.data.response.PlacementResponse;
 import com.vedantu.counselling.data.service.CounsellingDataService;
 import com.vedantu.counselling.data.service.PlacementDataService;
+import com.vedantu.counselling.data.util.PathConstants;
 import com.vedantu.counselling.data.view.CounsellingDataMetadata;
 import com.vedantu.counselling.data.view.PlacementMetadata;
 import com.vedantu.counselling.data.view.Response;
@@ -16,7 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/counsellingapp")
+@RequestMapping(PathConstants.COUNSELLINGAPP)
 @CrossOrigin
 public class PlacementViewController {
 

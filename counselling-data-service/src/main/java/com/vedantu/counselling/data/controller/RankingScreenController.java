@@ -4,6 +4,7 @@ import com.vedantu.counselling.data.model.ThreeTuple;
 import com.vedantu.counselling.data.request.CounsellingDataRequest;
 import com.vedantu.counselling.data.response.CounsellingData;
 import com.vedantu.counselling.data.response.CounsellingDataResponse;
+import com.vedantu.counselling.data.util.PathConstants;
 import com.vedantu.counselling.data.view.CounsellingDataMetadata;
 import com.vedantu.counselling.data.view.Response;
 import com.vedantu.counselling.data.service.CounsellingDataService;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/counsellingapp")
+@RequestMapping(PathConstants.COUNSELLINGAPP)
 public class RankingScreenController {
 
     private final CounsellingDataService counsellingDataService;

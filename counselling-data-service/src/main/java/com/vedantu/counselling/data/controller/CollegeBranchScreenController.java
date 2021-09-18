@@ -4,6 +4,7 @@ import com.vedantu.counselling.data.request.CollegeBranchRequest;
 import com.vedantu.counselling.data.response.CollegeBranchResponse;
 import com.vedantu.counselling.data.response.ListResponse;
 import com.vedantu.counselling.data.service.CollegeBranchDataService;
+import com.vedantu.counselling.data.util.PathConstants;
 import com.vedantu.counselling.data.view.CollegeBranchMetaData;
 import com.vedantu.counselling.data.view.Response;
 import com.vedantu.counselling.data.view.ResponseStatus;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/counsellingapp")
+@RequestMapping(PathConstants.COUNSELLINGAPP)
 public class CollegeBranchScreenController {
 
     private final CollegeBranchDataService collegeBranchDataService;

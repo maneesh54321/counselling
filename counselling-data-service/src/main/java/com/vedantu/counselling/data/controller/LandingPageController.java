@@ -4,6 +4,7 @@ import com.vedantu.counselling.data.exception.InvalidInputException;
 import com.vedantu.counselling.data.service.CounsellingDataService;
 import com.vedantu.counselling.data.service.DownloadService;
 import com.vedantu.counselling.data.service.SummaryDataService;
+import com.vedantu.counselling.data.util.PathConstants;
 import com.vedantu.counselling.data.util.Utils;
 import com.vedantu.counselling.data.view.ResponseStatus;
 import com.vedantu.counselling.data.view.*;
@@ -19,7 +20,7 @@ import java.util.Objects;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/counsellingapp")
+@RequestMapping(PathConstants.COUNSELLINGAPP)
 public class LandingPageController {
 
     private final CounsellingDataService counsellingDataService;

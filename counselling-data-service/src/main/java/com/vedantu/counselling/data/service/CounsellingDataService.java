@@ -1,5 +1,9 @@
 package com.vedantu.counselling.data.service;
 
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.vedantu.counselling.data.Constants;
 
 import com.vedantu.counselling.data.model.*;
@@ -18,7 +22,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,6 +52,9 @@ public class CounsellingDataService {
     private final DistanceMappingRepository distanceMappingRepository;
 
     private final int maxDistance;
+
+    private static final Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
+            Font.BOLD);
 
     @Autowired
     public CounsellingDataService(CategoryRepository categoryRepository, GenderRepository genderRepository,
@@ -215,5 +224,148 @@ public class CounsellingDataService {
             ));
         }
         return returnList;
+    }
+
+    public byte[] convertCounsellingDataResponseToPdf(CounsellingDataResponse counsellingDataResponse){
+        Document document = new Document();
+        document.setPageSize(PageSize.A4.rotate());
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            PdfWriter.getInstance(document, outputStream);
+            document.open();
+            addMetaData(document);
+            addTitlePage(document);
+            addContent(document, counsellingDataResponse.getCounsellingData());
+            document.close();
+            return outputStream.toByteArray();
+        } catch (DocumentException e) {
+            String errMsg = "Error occurred while creating pdf from counselling data";
+            log.error(errMsg);
+            throw new RuntimeException(errMsg);
+        }
+    }
+
+    private void addMetaData(Document document) {
+        document.addTitle("Previous years counselling results");
+        document.addSubject("Previous years counselling results");
+        document.addAuthor("Vedantu");
+        document.addCreator("Vedantu");
+    }
+
+    private void addTitlePage(Document document) throws DocumentException {
+        Paragraph preface = new Paragraph();
+
+        // Add title
+        preface.add(new Paragraph("Counselling results", catFont));
+
+        // Add an empty line
+        preface.add(new Paragraph(" "));
+
+        document.add(preface);
+    }
+
+    private void addContent(Document document, List<CounsellingData> counsellingData) throws DocumentException {
+        // add a table
+        PdfPTable table = createTable();
+
+        // add data to the table
+        counsellingData.forEach( data -> addRow(table, data));
+
+        // add table to the pdf document
+        document.add(table);
+    }
+
+    private PdfPTable createTable() throws DocumentException {
+        PdfPTable table = new PdfPTable(14);
+        // Set table width
+        table.setWidthPercentage(100);
+
+        // Add Header
+        addHeaderRow(table);
+
+        return table;
+    }
+
+    private static void addHeaderRow(PdfPTable table) throws DocumentException {
+        // Setting column width of each column from 0 to n-1
+        table.setWidths(new int[]{110, 350, 350, 140, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100});
+
+        // Adding headers
+        PdfPCell headerCell = new PdfPCell(new Phrase("College\nType"));
+        headerCell.setNoWrap(true);
+        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(headerCell);
+
+        headerCell = new PdfPCell(new Phrase("College"));
+        headerCell.setNoWrap(true);
+        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(headerCell);
+
+        headerCell = new PdfPCell(new Phrase("Branch"));
+        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(headerCell);
+
+        headerCell = new PdfPCell(new Phrase("Category"));
+        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(headerCell);
+
+        headerCell = new PdfPCell(new Phrase("Gender"));
+        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(headerCell);
+
+        headerCell = new PdfPCell(new Phrase("Quota"));
+        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(headerCell);
+
+        headerCell = new PdfPCell(new Phrase("OR\n(Advanced)"));
+        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(headerCell);
+
+        headerCell = new PdfPCell(new Phrase("CR\n(Advanced)"));
+        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(headerCell);
+
+        headerCell = new PdfPCell(new Phrase("OR\n(Mains)"));
+        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(headerCell);
+
+        headerCell = new PdfPCell(new Phrase("CR\n(Mains)"));
+        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(headerCell);
+
+        headerCell = new PdfPCell(new Phrase("OR\n(B.Arch)"));
+        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(headerCell);
+
+        headerCell = new PdfPCell(new Phrase("CR\n(B.Arch)"));
+        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(headerCell);
+
+        headerCell = new PdfPCell(new Phrase("Year"));
+        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(headerCell);
+
+        headerCell = new PdfPCell(new Phrase("Distance"));
+        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(headerCell);
+
+        table.setHeaderRows(1);
+    }
+
+    private void addRow(PdfPTable table, CounsellingData counsellingData) {
+        table.addCell(counsellingData.getCollegeType());
+        table.addCell(counsellingData.getCollege());
+        table.addCell(counsellingData.getBranch());
+        table.addCell(counsellingData.getCategory());
+        table.addCell(counsellingData.getGender());
+        table.addCell(counsellingData.getQuota());
+        table.addCell(String.valueOf(counsellingData.getOpeningRankAdvance()));
+        table.addCell(String.valueOf(counsellingData.getClosingRankAdvance()));
+        table.addCell(String.valueOf(counsellingData.getOpeningRankMains()));
+        table.addCell(String.valueOf(counsellingData.getClosingRankMains()));
+        table.addCell(String.valueOf(counsellingData.getOpeningRankBArch()));
+        table.addCell(String.valueOf(counsellingData.getClosingRankBArch()));
+        table.addCell(String.valueOf(counsellingData.getYear()));
+        table.addCell(String.valueOf(counsellingData.getDistance()));
     }
 }

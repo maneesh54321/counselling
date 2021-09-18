@@ -30,6 +30,8 @@ spring:
 server:
   tomcat:
     max-swallow-size: 50MB
+  servlet:
+    context-path: /counselling-app
 
 management:
   endpoints:

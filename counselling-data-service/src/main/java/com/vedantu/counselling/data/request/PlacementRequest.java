@@ -8,8 +8,8 @@ import java.util.List;
 
 @Data
 public class PlacementRequest {
-    private List<Integer> colleges; //optional
-    private List<Integer> collegeTypes; //optional
+    private List<Integer> collegeIds; //optional
+    private List<Integer> collegeTagIds; //optional
     private List<Integer> year; //optional
     private String ug_pg; //optional
 

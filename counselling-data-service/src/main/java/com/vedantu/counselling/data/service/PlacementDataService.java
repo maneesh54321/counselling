@@ -70,12 +70,12 @@ public class PlacementDataService {
 
     private List<PlacementRecord> filteredRecords(List<PlacementRecord> placementRecords, PlacementRequest placementFilter){
         List<PlacementRecord> filteredRecords = new ArrayList<>(placementRecords);
-        if(placementFilter.getColleges() != null && ! placementFilter.getColleges().isEmpty()){
-            filteredRecords = filteredRecords.stream().filter(r -> placementFilter.getColleges().contains(r.getCollegeId()))
+        if(placementFilter.getCollegeIds() != null && ! placementFilter.getCollegeIds().isEmpty()){
+            filteredRecords = filteredRecords.stream().filter(r -> placementFilter.getCollegeIds().contains(r.getCollegeId()))
                     .collect(Collectors.toList());
         }
-        if(placementFilter.getCollegeTypes() != null && ! placementFilter.getCollegeTypes().isEmpty()){
-            filteredRecords = filteredRecords.stream().filter(r -> placementFilter.getCollegeTypes().contains(r.getCollegeTypeId()))
+        if(placementFilter.getCollegeTagIds() != null && ! placementFilter.getCollegeTagIds().isEmpty()){
+            filteredRecords = filteredRecords.stream().filter(r -> placementFilter.getCollegeTagIds().contains(r.getCollegeTypeId()))
                     .collect(Collectors.toList());
         }
         if(placementFilter.getYear() != null && ! placementFilter.getYear().isEmpty()){
@@ -115,7 +115,7 @@ public class PlacementDataService {
         List<CollegeType> collegeTypes = collegeTypeRepository.findAll();
         List<College> colleges = collegeRepository.findAll();
         List<Integer> distinctYears = placementRepository.findDistinctYears();
-        return PlacementMetadataMapper.mapPlacmentMetadata(collegeTypes, colleges, distinctYears, ugPg());
+        return PlacementMetadataMapper.mapPlacementMetadata(collegeTypes, colleges, distinctYears, ugPg());
     }
 
     private List<String> ugPg(){

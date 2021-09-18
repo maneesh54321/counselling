@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 
 public class PlacementMetadataMapper {
 
-    public static PlacementMetadata mapPlacmentMetadata(List<CollegeType> collegeTypes, List<College> colleges,
-                                                        List<Integer> distinctYears, List<String> ugPg) {
+    public static PlacementMetadata mapPlacementMetadata(List<CollegeType> collegeTypes, List<College> colleges,
+                                                         List<Integer> distinctYears, List<String> ugPg) {
         List<CollegeTypeView> collegeTypeViewList = collegeTypes.parallelStream()
                 .map(collegeType -> new CollegeTypeView(collegeType.getId(), collegeType.getName()))
                 .collect(Collectors.toList());

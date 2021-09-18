@@ -1,5 +1,6 @@
 package com.vedantu.counselling.data.request;
 
+import com.vedantu.counselling.data.Constants;
 import com.vedantu.counselling.data.response.CounsellingData;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,8 +30,8 @@ public class CounsellingDataRequest {
 
     private CounsellingDataSortBy counsellingDataSortBy;
     private SortType sortType;
-    private int pageNumber;
-    private int pageSize;
+    private int pageNumber = Constants.DEFAULT_PAGE_NUMBER;
+    private int pageSize = Constants.DEFAULT_PAGE_SIZE;
 
     public enum CounsellingDataSortBy {
         COLLEGE {

@@ -1,5 +1,6 @@
 package com.vedantu.counselling.data.request;
 
+import com.vedantu.counselling.data.Constants;
 import com.vedantu.counselling.data.model.PlacementRecord;
 import lombok.Data;
 
@@ -14,8 +15,8 @@ public class PlacementRequest {
     private String ugOrPg; //optional
 
     private PlacementSortBy sortBy = PlacementSortBy.COLLEGE;
-    private int pageNumber = 1;
-    private int pageSize; // Mandatory
+    private int pageNumber = Constants.DEFAULT_PAGE_NUMBER;
+    private int pageSize = Constants.DEFAULT_PAGE_SIZE;
     private SortType sortType=SortType.ASC;
 
     public enum PlacementSortBy{

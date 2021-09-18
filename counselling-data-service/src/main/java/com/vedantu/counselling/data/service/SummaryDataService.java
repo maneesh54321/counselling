@@ -1,11 +1,10 @@
 package com.vedantu.counselling.data.service;
 
-import com.vedantu.counselling.data.model.CounsellingDataFile;
 import com.vedantu.counselling.data.repository.CounsellingDataFileRepository;
 import com.vedantu.counselling.data.service.mapper.SummaryServiceDataMapper;
-import com.vedantu.counselling.data.view.Download;
-import com.vedantu.counselling.data.view.SummaryData;
-import com.vedantu.counselling.data.view.Video;
+import com.vedantu.counselling.data.response.view.Download;
+import com.vedantu.counselling.data.response.SummaryData;
+import com.vedantu.counselling.data.response.view.Video;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;

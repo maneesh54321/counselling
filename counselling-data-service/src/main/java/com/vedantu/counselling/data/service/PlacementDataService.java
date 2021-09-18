@@ -10,10 +10,10 @@ import com.vedantu.counselling.data.repository.PlacementRepository;
 import com.vedantu.counselling.data.request.PlacementRequest;
 import com.vedantu.counselling.data.request.SortType;
 import com.vedantu.counselling.data.response.ListResponse;
-import com.vedantu.counselling.data.response.PlacementResponse;
+import com.vedantu.counselling.data.response.PlacementData;
 import com.vedantu.counselling.data.service.mapper.PlacementMetadataMapper;
 import com.vedantu.counselling.data.util.PaginationUtil;
-import com.vedantu.counselling.data.view.PlacementMetadata;
+import com.vedantu.counselling.data.response.metadata.PlacementMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,7 @@ public class PlacementDataService {
         this.collegeTypeRepository = collegeTypeRepository;
     }
 
-    public ListResponse<PlacementResponse> getPlacementData(PlacementRequest placementRequest){
+    public ListResponse<PlacementData> getPlacementData(PlacementRequest placementRequest){
 
         List<PlacementRecord> allRecords = placementRepository.getRecords();
         List<PlacementRecord> filteredRecords = filteredRecords(allRecords, placementRequest);
@@ -82,16 +82,16 @@ public class PlacementDataService {
             filteredRecords = filteredRecords.stream().filter(r -> placementFilter.getYear().contains(r.getYear()))
                     .collect(Collectors.toList());
         }
-        if(placementFilter.getUg_pg() != null && ! placementFilter.getUg_pg().isEmpty()){
-            filteredRecords = filteredRecords.stream().filter(r -> placementFilter.getUg_pg().equals(r.getUgOrPg()))
+        if(placementFilter.getUgOrPg() != null && ! placementFilter.getUgOrPg().isEmpty()){
+            filteredRecords = filteredRecords.stream().filter(r -> placementFilter.getUgOrPg().equals(r.getUgOrPg()))
                     .collect(Collectors.toList());
         }
         return filteredRecords;
     }
 
 
-    private List<PlacementResponse> getResponsePlacements(List<PlacementRecord> placementList) {
-        return placementList.stream().map(placement -> PlacementResponse
+    private List<PlacementData> getResponsePlacements(List<PlacementRecord> placementList) {
+        return placementList.stream().map(placement -> PlacementData
                         .builder()
                         .id(placement.getId())
                         .totalStudents(placement.getTotalStudents() == null ? 0:placement.getTotalStudents())

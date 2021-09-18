@@ -1,5 +1,7 @@
-package com.vedantu.counselling.data.view;
+package com.vedantu.counselling.data.response.metadata;
 
+import com.vedantu.counselling.data.response.view.BranchTagView;
+import com.vedantu.counselling.data.response.view.CollegeView;
 import lombok.Builder;
 import lombok.Data;
 

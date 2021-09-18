@@ -1,17 +1,13 @@
 package com.vedantu.counselling.data.controller;
 
-import com.vedantu.counselling.data.model.PlacementRecord;
-import com.vedantu.counselling.data.repository.PlacementRepository;
 import com.vedantu.counselling.data.request.PlacementRequest;
 import com.vedantu.counselling.data.response.ListResponse;
-import com.vedantu.counselling.data.response.PlacementResponse;
-import com.vedantu.counselling.data.service.CounsellingDataService;
+import com.vedantu.counselling.data.response.PlacementData;
 import com.vedantu.counselling.data.service.PlacementDataService;
 import com.vedantu.counselling.data.util.PathConstants;
-import com.vedantu.counselling.data.view.CounsellingDataMetadata;
-import com.vedantu.counselling.data.view.PlacementMetadata;
-import com.vedantu.counselling.data.view.Response;
-import com.vedantu.counselling.data.view.ResponseStatus;
+import com.vedantu.counselling.data.response.metadata.PlacementMetadata;
+import com.vedantu.counselling.data.response.Response;
+import com.vedantu.counselling.data.response.ResponseStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +30,7 @@ public class PlacementViewController {
     }
 
     @PostMapping(value = "/placements", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response<ListResponse<PlacementResponse>> getPlacements(@RequestBody PlacementRequest placementRequest) {
+    public Response<ListResponse<PlacementData>> getPlacements(@RequestBody PlacementRequest placementRequest) {
         return new Response<>(ResponseStatus.SUCCESS, placementDataService.getPlacementData(placementRequest));
     }
 

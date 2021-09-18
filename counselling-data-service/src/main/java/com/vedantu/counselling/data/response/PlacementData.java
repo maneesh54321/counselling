@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 @Data
 @Builder
-public class PlacementResponse {
+public class PlacementData {
     private int id;
     private String college;
     private String collegeType;

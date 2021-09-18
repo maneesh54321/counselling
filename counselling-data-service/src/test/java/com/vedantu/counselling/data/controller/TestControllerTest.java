@@ -1,6 +1,6 @@
 package com.vedantu.counselling.data.controller;
 
-import com.vedantu.counselling.data.view.Person;
+import com.vedantu.counselling.data.response.view.Person;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;

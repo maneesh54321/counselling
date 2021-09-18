@@ -3,7 +3,7 @@ package com.vedantu.counselling.data.service;
 import com.vedantu.counselling.data.exception.InvalidInputException;
 import com.vedantu.counselling.data.model.CounsellingDataFile;
 import com.vedantu.counselling.data.repository.CounsellingDataFileRepository;
-import com.vedantu.counselling.data.view.DownloadedFile;
+import com.vedantu.counselling.data.response.view.DownloadedFile;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;

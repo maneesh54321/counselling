@@ -2,10 +2,9 @@ package com.vedantu.counselling.data.service.mapper;
 
 import com.vedantu.counselling.data.model.College;
 import com.vedantu.counselling.data.model.CollegeType;
-import com.vedantu.counselling.data.view.CollegeTypeView;
-import com.vedantu.counselling.data.view.CollegeView;
-import com.vedantu.counselling.data.view.CounsellingDataMetadata;
-import com.vedantu.counselling.data.view.PlacementMetadata;
+import com.vedantu.counselling.data.response.view.CollegeTypeView;
+import com.vedantu.counselling.data.response.view.CollegeView;
+import com.vedantu.counselling.data.response.metadata.PlacementMetadata;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,7 +25,7 @@ public class PlacementMetadataMapper {
                 .colleges(collegeViewList)
                 .collegeTypes(collegeTypeViewList)
                 .years(distinctYears)
-                .ugPg(ugPg)
+                .ugOrPg(ugPg)
                 .build();
 
 

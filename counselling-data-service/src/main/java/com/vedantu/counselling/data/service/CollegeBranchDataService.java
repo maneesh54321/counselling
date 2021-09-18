@@ -13,7 +13,7 @@ import com.vedantu.counselling.data.response.ListResponse;
 import com.vedantu.counselling.data.service.mapper.CollegeBranchMetaDataMapper;
 import com.vedantu.counselling.data.util.PaginationUtil;
 import com.vedantu.counselling.data.util.SequenceGenerator;
-import com.vedantu.counselling.data.view.CollegeBranchMetaData;
+import com.vedantu.counselling.data.response.metadata.CollegeBranchMetaData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -56,7 +56,7 @@ public class CollegeBranchDataService {
 
         List<CollegeBranchResponse> finalCollegeBranchResponseData = mapCollegeBranchData(filterDataForRequest(allCollegeBranch, request));
 
-        Comparator<CollegeBranchResponse> comparator = request.getSortType().equals(SortType.ASC) ? request.getCounsellingDataSortBy().getComparator() : request.getCounsellingDataSortBy().getComparator().reversed();
+        Comparator<CollegeBranchResponse> comparator = request.getSortType().equals(SortType.ASC) ? request.getCollegeBranchSortBy().getComparator() : request.getCollegeBranchSortBy().getComparator().reversed();
         finalCollegeBranchResponseData.sort(comparator);
 
         int returnCount = finalCollegeBranchResponseData.size();

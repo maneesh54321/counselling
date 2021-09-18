@@ -11,7 +11,7 @@ public class PlacementRequest {
     private List<Integer> collegeIds; //optional
     private List<Integer> collegeTagIds; //optional
     private List<Integer> year; //optional
-    private String ug_pg; //optional
+    private String ugOrPg; //optional
 
     private PlacementSortBy sortBy = PlacementSortBy.COLLEGE;
     private int pageNumber = 1;

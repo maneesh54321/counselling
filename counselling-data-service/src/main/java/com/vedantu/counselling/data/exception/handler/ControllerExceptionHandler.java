@@ -1,8 +1,8 @@
 package com.vedantu.counselling.data.exception.handler;
 
 import com.vedantu.counselling.data.exception.InvalidInputException;
-import com.vedantu.counselling.data.view.Response;
-import com.vedantu.counselling.data.view.ResponseStatus;
+import com.vedantu.counselling.data.response.Response;
+import com.vedantu.counselling.data.response.ResponseStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;

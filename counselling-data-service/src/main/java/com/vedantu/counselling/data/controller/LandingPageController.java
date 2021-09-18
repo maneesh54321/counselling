@@ -1,13 +1,15 @@
 package com.vedantu.counselling.data.controller;
 
 import com.vedantu.counselling.data.exception.InvalidInputException;
+import com.vedantu.counselling.data.response.Response;
+import com.vedantu.counselling.data.response.SummaryData;
 import com.vedantu.counselling.data.service.CounsellingDataService;
 import com.vedantu.counselling.data.service.DownloadService;
 import com.vedantu.counselling.data.service.SummaryDataService;
 import com.vedantu.counselling.data.util.PathConstants;
 import com.vedantu.counselling.data.util.Utils;
-import com.vedantu.counselling.data.view.ResponseStatus;
-import com.vedantu.counselling.data.view.*;
+import com.vedantu.counselling.data.response.ResponseStatus;
+import com.vedantu.counselling.data.response.view.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;

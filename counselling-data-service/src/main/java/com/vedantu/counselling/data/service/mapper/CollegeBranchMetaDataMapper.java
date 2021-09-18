@@ -2,9 +2,9 @@ package com.vedantu.counselling.data.service.mapper;
 
 import com.vedantu.counselling.data.model.BranchTag;
 import com.vedantu.counselling.data.model.College;
-import com.vedantu.counselling.data.view.BranchTagView;
-import com.vedantu.counselling.data.view.CollegeBranchMetaData;
-import com.vedantu.counselling.data.view.CollegeView;
+import com.vedantu.counselling.data.response.view.BranchTagView;
+import com.vedantu.counselling.data.response.metadata.CollegeBranchMetaData;
+import com.vedantu.counselling.data.response.view.CollegeView;
 
 import java.util.List;
 import java.util.stream.Collectors;

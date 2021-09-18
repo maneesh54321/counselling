@@ -1,5 +1,7 @@
-package com.vedantu.counselling.data.view;
+package com.vedantu.counselling.data.response;
 
+import com.vedantu.counselling.data.response.view.Download;
+import com.vedantu.counselling.data.response.view.Video;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

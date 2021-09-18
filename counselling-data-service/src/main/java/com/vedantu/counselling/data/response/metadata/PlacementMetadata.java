@@ -1,11 +1,11 @@
-package com.vedantu.counselling.data.view;
+package com.vedantu.counselling.data.response.metadata;
 
-import com.vedantu.counselling.data.model.RankType;
+import com.vedantu.counselling.data.response.view.CollegeTypeView;
+import com.vedantu.counselling.data.response.view.CollegeView;
 import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Map;
 
 @Data
 @Builder
@@ -13,6 +13,6 @@ public class PlacementMetadata {
     private List<CollegeTypeView> collegeTypes;
     private List<CollegeView> colleges;
     private List<Integer> years;
-    private List<String> ugPg;
+    private List<String> ugOrPg;
 }
 

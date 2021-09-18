@@ -1,4 +1,4 @@
-package com.vedantu.counselling.data.view;
+package com.vedantu.counselling.data.response;
 
 public enum ResponseStatus {
     SUCCESS, FAILED

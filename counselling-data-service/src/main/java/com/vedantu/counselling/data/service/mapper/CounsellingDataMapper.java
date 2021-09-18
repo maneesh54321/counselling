@@ -1,7 +1,8 @@
 package com.vedantu.counselling.data.service.mapper;
 
 import com.vedantu.counselling.data.model.*;
-import com.vedantu.counselling.data.view.*;
+import com.vedantu.counselling.data.response.metadata.CounsellingDataMetadata;
+import com.vedantu.counselling.data.response.view.*;
 
 import java.util.HashMap;
 import java.util.List;

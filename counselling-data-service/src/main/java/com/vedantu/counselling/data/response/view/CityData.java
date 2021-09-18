@@ -1,8 +1,7 @@
-package com.vedantu.counselling.data.view;
+package com.vedantu.counselling.data.response.view;
 
 import java.util.List;
 
-import com.vedantu.counselling.data.model.City;
 import lombok.*;
 
 @NoArgsConstructor

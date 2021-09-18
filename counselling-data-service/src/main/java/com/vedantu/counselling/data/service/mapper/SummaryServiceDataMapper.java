@@ -1,7 +1,7 @@
 package com.vedantu.counselling.data.service.mapper;
 
 import com.vedantu.counselling.data.model.CounsellingDataFile;
-import com.vedantu.counselling.data.view.Download;
+import com.vedantu.counselling.data.response.view.Download;
 
 import java.util.List;
 import java.util.stream.Collectors;

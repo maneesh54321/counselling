@@ -19,15 +19,15 @@ import java.util.Objects;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/rank-screen")
-public class RankingScreenController {
+@RequestMapping("/colleges/ranks")
+public class RankDataController {
 
     private final CounsellingDataService counsellingDataService;
 
     private static final String COUNSELLING_RECORDS_DOWNLOAD_FILE_NAME = "counselling-records";
 
     @Autowired
-    public RankingScreenController(CounsellingDataService counsellingDataService) {
+    public RankDataController(CounsellingDataService counsellingDataService) {
         this.counsellingDataService = counsellingDataService;
     }
 
@@ -36,12 +36,12 @@ public class RankingScreenController {
         return new Response<>(ResponseStatus.SUCCESS, counsellingDataService.getCounsellingDataMetadata());
     }
 
-    @PostMapping(value = "/data/filter", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/query/filter", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response<CounsellingDataResponse> getCounsellingData(@RequestBody CounsellingDataRequest counsellingDataRequest) {
         return new Response<>(ResponseStatus.SUCCESS, counsellingDataService.getCounsellingDataFor(counsellingDataRequest));
     }
 
-    @PostMapping(value = "/data/filter/download", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/query/filter/download", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ByteArrayResource> downloadCounsellingData(@RequestBody CounsellingDataRequest counsellingDataRequest) {
 
         if (Objects.isNull(counsellingDataRequest)) {

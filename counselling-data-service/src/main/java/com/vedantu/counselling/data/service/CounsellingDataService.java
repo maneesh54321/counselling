@@ -110,6 +110,7 @@ public class CounsellingDataService {
 
     @Cacheable(value = {"cities"})
     public CityData getAllCities() {
+
         List<City> cities = cityRepository.findAll();
         log.info("Number of cities {}", cities.size());
 

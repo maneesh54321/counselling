@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/college-branch")
-public class CollegeBranchScreenController {
+@RequestMapping("/colleges/branches")
+public class CollegeBranchDataController {
 
     private final CollegeBranchDataService collegeBranchDataService;
 
     @Autowired
-    public CollegeBranchScreenController(CollegeBranchDataService collegeBranchDataService) {
+    public CollegeBranchDataController(CollegeBranchDataService collegeBranchDataService) {
         this.collegeBranchDataService = collegeBranchDataService;
     }
 
@@ -29,7 +29,7 @@ public class CollegeBranchScreenController {
         return new Response<>(ResponseStatus.SUCCESS, collegeBranchDataService.getCollegeBranchMetaData());
     }
 
-    @PostMapping(value = "/data/filter", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/query/filter", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response<ListResponse<CollegeBranchResponse>> getCollegeBranchDataFor(@RequestBody CollegeBranchRequest collegeBranchRequest) {
         return new Response<>(ResponseStatus.SUCCESS, collegeBranchDataService.getCollegeBranchDataFor(collegeBranchRequest));
     }

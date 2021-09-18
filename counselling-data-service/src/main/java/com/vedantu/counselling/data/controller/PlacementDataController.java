@@ -13,15 +13,15 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/placements")
+@RequestMapping("/colleges/placements")
 @CrossOrigin
 @Slf4j
-public class PlacementViewController {
+public class PlacementDataController {
 
     private final PlacementDataService placementDataService;
 
     @Autowired
-    public PlacementViewController(PlacementDataService placementDataService) {
+    public PlacementDataController(PlacementDataService placementDataService) {
         this.placementDataService = placementDataService;
     }
 
@@ -30,7 +30,7 @@ public class PlacementViewController {
         return new Response<>(ResponseStatus.SUCCESS, placementDataService.getPlacementMetadata());
     }
 
-    @PostMapping(value = "/data/filter", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/query/filter", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response<ListResponse<PlacementData>> getPlacements(@RequestBody PlacementRequest placementRequest) {
         return new Response<>(ResponseStatus.SUCCESS, placementDataService.getPlacementData(placementRequest));
     }

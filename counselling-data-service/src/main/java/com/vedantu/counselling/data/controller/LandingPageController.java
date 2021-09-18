@@ -41,7 +41,7 @@ public class LandingPageController {
         this.downloadService = downloadService;
     }
 
-    @GetMapping(value = "/city/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/cities", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response<CityData> getAllCities() {
         return new Response<>(ResponseStatus.SUCCESS, counsellingDataService.getAllCities());
     }

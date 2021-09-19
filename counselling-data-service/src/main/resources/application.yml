@@ -58,9 +58,6 @@ logging:
 # Counselling Data
 data:
   maxDistance: 3000
-  summary:
-    description: Description to be provided by Vikash Sir.
-    disclaimer: Disclaimer to be provided by Vikash Sir.
 
 uploadService:
   password: counselling@123

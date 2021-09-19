@@ -11,6 +11,7 @@ import com.vedantu.counselling.data.service.DownloadService;
 import com.vedantu.counselling.data.service.SummaryDataService;
 import com.vedantu.counselling.data.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,14 +27,16 @@ public class AdminController {
     private final DownloadService downloadService;
     private final VideoService videoService;
     private final SummaryDataService summaryService;
+    private final CacheManager cacheManager;
 
     @Autowired
     public AdminController(AuthService authService, DownloadService downloadService,
-                           VideoService videoService, SummaryDataService summaryService) {
+                           VideoService videoService, SummaryDataService summaryService, CacheManager cacheManager) {
         this.authService = authService;
         this.downloadService = downloadService;
         this.videoService = videoService;
         this.summaryService = summaryService;
+        this.cacheManager = cacheManager;
     }
 
     @PostMapping("/files/upload")
@@ -86,6 +89,15 @@ public class AdminController {
         authService.authenticate(password);
         SummaryData videoDb = summaryService.createNewSummary(description, disclaimer);
         return new Response<>(ResponseStatus.SUCCESS, videoDb);
+    }
+
+    @PostMapping("/invalidate")
+    public Response<String> cacheInvalidate(@RequestParam("key") String password)
+            throws InvalidInputException, AuthenticationException {
+        authService.authenticate(password);
+        cacheManager.getCacheNames()
+                .forEach(cacheName -> cacheManager.getCache(cacheName).clear());
+        return new Response<>(ResponseStatus.SUCCESS, "All caches evicted");
     }
 
 }

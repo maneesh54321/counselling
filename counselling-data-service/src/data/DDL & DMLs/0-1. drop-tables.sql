@@ -1,4 +1,6 @@
 DROP TABLE public.counselling_data_file;
+DROP TABLE public.video;
+DROP TABLE public.summary_data;
 DROP TABLE public.access_tracker;
 DROP TABLE public.rank;
 DROP TABLE public.distance_mapping;

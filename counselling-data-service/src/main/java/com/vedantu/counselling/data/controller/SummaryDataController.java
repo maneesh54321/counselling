@@ -25,7 +25,7 @@ import java.util.Objects;
 @RestController
 @CrossOrigin
 @RequestMapping("/landing-page")
-public class LandingPageController {
+public class SummaryDataController {
 
     private final CounsellingDataService counsellingDataService;
 
@@ -35,20 +35,16 @@ public class LandingPageController {
 
     private final AccessTrackerService accessTrackerService;
 
-    private final AuthService authService;
-
     @Autowired
-    public LandingPageController(
+    public SummaryDataController(
             CounsellingDataService counsellingDataService,
             SummaryDataService summaryDataService,
             DownloadService downloadService,
-            AccessTrackerService accessTrackerService,
-            AuthService authService) {
+            AccessTrackerService accessTrackerService) {
         this.counsellingDataService = counsellingDataService;
         this.summaryDataService = summaryDataService;
         this.downloadService = downloadService;
         this.accessTrackerService = accessTrackerService;
-        this.authService = authService;
     }
 
     @GetMapping(value = "/cities", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -80,17 +76,6 @@ public class LandingPageController {
                         "attachment; filename=" + downloadedFile.getName()
                 )
                 .body(downloadFileByteArrayResource);
-    }
-
-    @PostMapping("/files/upload")
-    public Response<String> uploadFile(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam("description") String description,
-            @RequestParam("key") String password
-    ) throws InvalidInputException, AuthenticationException {
-        authService.authenticate(password);
-        downloadService.uploadFile(description, file);
-        return new Response<>(ResponseStatus.SUCCESS, "File uploaded successfully!");
     }
 
 }

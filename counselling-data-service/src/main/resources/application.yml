@@ -26,6 +26,11 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
 
+
+hibernate:
+  id:
+    new_generator_mappings: true
+
 # configure embedded Tomcat not to cancel the request with large body up to the set size
 server:
   tomcat:

@@ -246,6 +246,22 @@ ALTER TABLE public.access_tracker OWNER to postgres;
 
 
 ---------------------------------------------------------------------------------------
+------------------------------Table: public.video----------------------
+---------------------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS public.video
+(
+    id integer NOT NULL,
+    active boolean NOT NULL,
+    name character varying(255) COLLATE pg_catalog."default",
+    uri character varying(255) COLLATE pg_catalog."default",
+    CONSTRAINT video_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.video OWNER to postgres;
+
+---------------------------------------------------------------------------------------
 ------------------------------Table: public.counselling_data_file----------------------
 ---------------------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.counselling_data_file
@@ -261,4 +277,19 @@ CREATE TABLE IF NOT EXISTS public.counselling_data_file
 TABLESPACE pg_default;
 
 ALTER TABLE public.counselling_data_file OWNER to postgres;
-	
+
+---------------------------------------------------------------------------------------
+------------------------------Table: public.summary_data----------------------
+---------------------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS public.summary_data
+(
+    id integer NOT NULL,
+    description character varying(255) COLLATE pg_catalog."default",
+    disclaimer character varying(255) COLLATE pg_catalog."default",
+    CONSTRAINT summary_data_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.summary_data OWNER to postgres;
+

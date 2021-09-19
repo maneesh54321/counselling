@@ -8,7 +8,15 @@ import java.util.List;
 @Slf4j
 public class PaginationUtil {
 
-    public static <T> List<T> getPaginatedList(List<T> finalCounsellingData, int size, int pageSize, int pageNumber) {
+    public static <T> List<T> getPaginatedList(List<T> finalCounsellingData, int size, int pageSize,
+                                               int pageNumber) {
+
+        if(pageSize < 0)
+            throw new InvalidInputException("Pagination with page size less than zero");
+
+        if(pageNumber < 0)
+            throw new InvalidInputException("Pagination with page number less than zero");
+
         log.debug("Creating paginated data total records {}, page size {}, page Number  {}", size, pageSize, pageNumber);
 
         if((pageNumber -1) * pageSize > size)

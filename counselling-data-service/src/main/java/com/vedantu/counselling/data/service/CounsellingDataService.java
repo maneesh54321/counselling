@@ -122,7 +122,7 @@ public class CounsellingDataService {
 
         if (request == null) {
             log.info("Request is null hence no records in response");
-            return new CounsellingDataResponse(0, Collections.emptyList());
+            return new CounsellingDataResponse(0, request.getCityId(), Collections.emptyList());
         }
 
         List<CounsellingDbData> allData = rankRepository.findCounsellingDbData();
@@ -137,11 +137,14 @@ public class CounsellingDataService {
 
         int size = finalCounsellingData.size();
         log.debug("Total sorted counselling records after filtering data request are {}", size);
-        return new CounsellingDataResponse(size,
+        return new CounsellingDataResponse(size, request.getCityId(),
                 PaginationUtil.getPaginatedList(finalCounsellingData, size, request.getPageSize(), request.getPageNumber()));
     }
 
     private List<CounsellingData>  mapAndApplyDistanceFilter(List<CounsellingData> inputList, CounsellingDataRequest request) {
+        if(request.getCityId() <= 0) {
+            return inputList;
+        }
         List<DistanceMapping> allDistanceFromLocation = distanceMappingRepository.findByCityId(request.getCityId());
         Map<String, Integer> collegeDistance = allDistanceFromLocation.stream().collect(Collectors.toMap(e->e.getCollege().getName(), DistanceMapping::getDistance));
 

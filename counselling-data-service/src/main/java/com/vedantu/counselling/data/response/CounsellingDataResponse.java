@@ -11,5 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 public class CounsellingDataResponse {
     private int totalRecord;
+    private int cityId;
     private List<CounsellingData> counsellingData;
 }

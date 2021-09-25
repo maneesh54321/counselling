@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.util.*;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -122,7 +123,7 @@ public class CounsellingDataService {
 
         if (request == null) {
             log.info("Request is null hence no records in response");
-            return new CounsellingDataResponse(0, request.getCityId(), Collections.emptyList());
+            return new CounsellingDataResponse(0, 0, Collections.emptyList());
         }
 
         List<CounsellingDbData> allData = rankRepository.findCounsellingDbData();
@@ -190,22 +191,23 @@ public class CounsellingDataService {
             filteredData = filteredData.stream().filter(entry -> request.getCollegeTagIds().contains(entry.getCollegeTypeId())).collect(Collectors.toList());
         }
 
-        if (request.getAdvanceCRStart() != 0 && request.getAdvanceCREnd() != 0) {
-            filteredData = filteredData.stream().filter(
-                    entry -> (entry.getRankTypeId() != Constants.RANK_TYPE_ADVANCE || (entry.getRankTypeId() == Constants.RANK_TYPE_ADVANCE && entry.getCloseRank() >= request.getAdvanceCRStart() && entry.getCloseRank() <= request.getAdvanceCREnd()))
-            ).collect(Collectors.toList());
-        }
+        if (request.getAdvanceCREnd() > 0 || request.getMainsCREnd() > 0 || request.getBArchCREnd() > 0)  {
+            Predicate<CounsellingDbData> predicate = null;
+            if(request.getAdvanceCREnd() > 0) {
+                predicate = data -> data.getRankTypeId() == Constants.RANK_TYPE_ADVANCE && data.getCloseRank() >=request.getAdvanceCRStart() && data.getCloseRank()<=request.getAdvanceCREnd();
+            }
 
-        if (request.getMainsCRStart() != 0 && request.getMainsCREnd() != 0) {
-            filteredData = filteredData.stream().filter(
-                    entry -> (entry.getRankTypeId() != Constants.RANK_TYPE_MAINS || (entry.getRankTypeId() == Constants.RANK_TYPE_MAINS && entry.getCloseRank() >= request.getMainsCRStart() && entry.getCloseRank() <= request.getMainsCREnd()))
-            ).collect(Collectors.toList());
-        }
+            if(request.getMainsCREnd() > 0) {
+                Predicate<CounsellingDbData> predicateMainRank = data -> data.getRankTypeId() == Constants.RANK_TYPE_MAINS && data.getCloseRank() >=request.getMainsCRStart() && data.getCloseRank()<=request.getMainsCREnd();
+                predicate = predicate == null ? predicateMainRank : predicate.or(predicateMainRank);
+            }
 
-        if (request.getBArchCRStart() != 0 && request.getBArchCREnd() != 0) {
-            filteredData = filteredData.stream().filter(
-                    entry -> (entry.getRankTypeId() != Constants.RANK_TYPE_BARCH || (entry.getRankTypeId() == Constants.RANK_TYPE_BARCH && entry.getCloseRank() >= request.getBArchCRStart() && entry.getCloseRank() <= request.getBArchCREnd()))
-            ).collect(Collectors.toList());
+            if(request.getBArchCREnd() > 0) {
+                Predicate<CounsellingDbData> predicateBArchRank = data -> data.getRankTypeId() == Constants.RANK_TYPE_BARCH && data.getCloseRank() >=request.getBArchCRStart() && data.getCloseRank()<=request.getBArchCREnd();
+                predicate = predicate == null ? predicateBArchRank : predicate.or(predicateBArchRank);
+            }
+
+            filteredData = predicate == null ? filteredData : filteredData.stream().filter(predicate).collect(Collectors.toList());
         }
 
         return filteredData;

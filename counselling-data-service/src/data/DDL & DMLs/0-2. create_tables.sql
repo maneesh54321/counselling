@@ -299,7 +299,7 @@ CREATE TABLE IF NOT EXISTS public.disclaimer_data
 (
     id integer NOT NULL,
     type character varying(255) COLLATE pg_catalog."default",
-    content character varying(255) COLLATE pg_catalog."default",
+    content character varying(1024) COLLATE pg_catalog."default",
     CONSTRAINT disclaimer_data_pkey PRIMARY KEY (id)
 )
 

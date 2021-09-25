@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -86,19 +87,19 @@ public class PlacementDataService {
 
     private List<PlacementRecord> filteredRecords(List<PlacementRecord> placementRecords, PlacementRequest placementFilter){
         List<PlacementRecord> filteredRecords = new ArrayList<>(placementRecords);
-        if(placementFilter.getCollegeIds() != null && ! placementFilter.getCollegeIds().isEmpty()){
+        if( ! isEmpty(placementFilter.getCollegeIds())){
             filteredRecords = filteredRecords.stream().filter(r -> placementFilter.getCollegeIds().contains(r.getCollegeId()))
                     .collect(Collectors.toList());
         }
-        if(placementFilter.getCollegeTagIds() != null && ! placementFilter.getCollegeTagIds().isEmpty()){
+        if( ! isEmpty(placementFilter.getCollegeTagIds())){
             filteredRecords = filteredRecords.stream().filter(r -> placementFilter.getCollegeTagIds().contains(r.getCollegeTypeId()))
                     .collect(Collectors.toList());
         }
-        if(placementFilter.getYear() != null && ! placementFilter.getYear().isEmpty()){
+        if( ! isEmpty(placementFilter.getYear())){
             filteredRecords = filteredRecords.stream().filter(r -> placementFilter.getYear().contains(r.getYear()))
                     .collect(Collectors.toList());
         }
-        if(placementFilter.getUgOrPg() != null && ! placementFilter.getUgOrPg().isEmpty()){
+        if( ! isEmpty(placementFilter.getUgOrPg())){
             filteredRecords = filteredRecords.stream().filter(r -> placementFilter.getUgOrPg().equals(r.getUgOrPg()))
                     .collect(Collectors.toList());
         }

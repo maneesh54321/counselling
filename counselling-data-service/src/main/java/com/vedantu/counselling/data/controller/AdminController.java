@@ -2,6 +2,7 @@ package com.vedantu.counselling.data.controller;
 
 import com.vedantu.counselling.data.exception.AuthenticationException;
 import com.vedantu.counselling.data.exception.InvalidInputException;
+import com.vedantu.counselling.data.model.DisclaimerData;
 import com.vedantu.counselling.data.model.SummaryData;
 import com.vedantu.counselling.data.model.Video;
 import com.vedantu.counselling.data.response.Response;
@@ -81,14 +82,26 @@ public class AdminController {
     }
 
     @PostMapping("/summary")
-    public Response<SummaryData> uploadSummary(String description, String disclaimer, @RequestParam("key") String password
+    public Response<SummaryData> uploadSummary(String description, @RequestParam("key") String password
     ) throws InvalidInputException, AuthenticationException {
         if(ObjectUtils.isEmpty(description))
-            throw new InvalidInputException("Name or URI cannot be null/empty");
+            throw new InvalidInputException("Description cannot be null/empty");
 
         authService.authenticate(password);
-        SummaryData videoDb = summaryService.createNewSummary(description, disclaimer);
+        SummaryData videoDb = summaryService.createNewSummary(description);
         return new Response<>(ResponseStatus.SUCCESS, videoDb);
+    }
+
+    @PutMapping("/disclaimer")
+    public Response<DisclaimerData> uploadSummary(String type, String content, @RequestParam("key") String password
+    ) throws InvalidInputException, AuthenticationException {
+        if(ObjectUtils.isEmpty(type))
+            throw new InvalidInputException("type cannot null/empty");
+        if(ObjectUtils.isEmpty(content))
+            throw new InvalidInputException("content cannot null/empty");
+        authService.authenticate(password);
+        DisclaimerData disclaimerData = summaryService.updateDisclaimer(type, content);
+        return new Response<>(ResponseStatus.SUCCESS, disclaimerData);
     }
 
     @PostMapping("/invalidate")

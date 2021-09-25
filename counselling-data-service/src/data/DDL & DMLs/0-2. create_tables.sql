@@ -285,7 +285,6 @@ CREATE TABLE IF NOT EXISTS public.summary_data
 (
     id integer NOT NULL,
     description character varying(255) COLLATE pg_catalog."default",
-    disclaimer character varying(255) COLLATE pg_catalog."default",
     CONSTRAINT summary_data_pkey PRIMARY KEY (id)
 )
 
@@ -293,3 +292,17 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.summary_data OWNER to postgres;
 
+---------------------------------------------------------------------------------------
+------------------------------Table: public.summary_data----------------------
+---------------------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS public.disclaimer_data
+(
+    id integer NOT NULL,
+    type character varying(255) COLLATE pg_catalog."default",
+    content character varying(255) COLLATE pg_catalog."default",
+    CONSTRAINT disclaimer_data_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.summary_data OWNER to postgres;

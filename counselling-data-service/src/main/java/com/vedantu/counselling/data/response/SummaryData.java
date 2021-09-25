@@ -1,5 +1,6 @@
 package com.vedantu.counselling.data.response;
 
+import com.vedantu.counselling.data.response.view.DisclaimerView;
 import com.vedantu.counselling.data.response.view.Download;
 import com.vedantu.counselling.data.response.view.Video;
 import lombok.Getter;
@@ -8,7 +9,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -16,26 +19,19 @@ import java.util.List;
 @ToString
 public class SummaryData {
     private String description;
-    private String disclaimer;
-    private List<Video> videos;
-    private List<Download> downloads;
+    private List<DisclaimerView> disclaimer = new ArrayList<>();
+    private List<Video> videos = new ArrayList<>();
+    private List<Download> downloads = new ArrayList<>();
 
-    public SummaryData(String description, String disclaimer) {
+    public SummaryData(String description) {
         this.description = description;
-        this.disclaimer = disclaimer;
     }
 
     public void addVideo(Video newVideo){
-        if(videos == null){
-            videos = new ArrayList<>();
-        }
         videos.add(newVideo);
     }
 
     public void addDownload(Download newDownload){
-        if(downloads == null){
-            downloads = new ArrayList<>();
-        }
         downloads.add(newDownload);
     }
 }

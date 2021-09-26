@@ -17,6 +17,9 @@ public class PaginationUtil {
         if(pageNumber < 0)
             throw new InvalidInputException("Pagination with page number less than zero");
 
+        if(finalCounsellingData.size() == 0) {
+            return finalCounsellingData;
+        }
         log.debug("Creating paginated data total records {}, page size {}, page Number  {}", size, pageSize, pageNumber);
 
         if((pageNumber -1) * pageSize > size)

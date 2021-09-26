@@ -1,9 +1,7 @@
-INSERT INTO video VALUES (nextval('video_id_seq'), true, 'video:01', 'lxFZ1OPILYs');
-INSERT INTO video VALUES (nextval('video_id_seq'), true, 'video:02', 'z4QFuijdAFs');
+INSERT INTO video VALUES (nextval('video_id_seq'), true, 'video:01', 'z4QFuijdAFs');
+INSERT INTO video VALUES (nextval('video_id_seq'), true, 'video:02', 'lxFZ1OPILYs');
 INSERT INTO video VALUES (nextval('video_id_seq'), true, 'video:03', 'uHOnBQsIakw');
-INSERT INTO video VALUES (nextval('video_id_seq'), true, 'video:04', 'aiKDTdOvn0E');
-INSERT INTO video VALUES (nextval('video_id_seq'), true, 'video:05', 'MN8p-Vrn6G0');
-INSERT INTO video VALUES (nextval('video_id_seq'), true, 'video:06', '9svrftrKb2M');
+INSERT INTO video VALUES (nextval('video_id_seq'), true, 'video:04', '9svrftrKb2M');
 
 INSERT INTO summary_data VALUES (nextval('summary_id_seq'), 'description');
 

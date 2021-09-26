@@ -267,7 +267,7 @@ public class CounsellingDataService {
             return outputStream.toByteArray();
         } catch (DocumentException e) {
             String errMsg = "Error occurred while creating pdf from counselling data";
-            log.error(errMsg);
+            log.error(errMsg, e);
             throw new RuntimeException(errMsg);
         }
     }
@@ -303,7 +303,7 @@ public class CounsellingDataService {
     }
 
     private PdfPTable createTable() throws DocumentException {
-        PdfPTable table = new PdfPTable(14);
+        PdfPTable table = new PdfPTable(13);
         // Set table width
         table.setWidthPercentage(100);
 
@@ -315,7 +315,7 @@ public class CounsellingDataService {
 
     private static void addHeaderRow(PdfPTable table) throws DocumentException {
         // Setting column width of each column from 0 to n-1
-        table.setWidths(new int[]{110, 350, 350, 140, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100});
+        table.setWidths(new int[]{110, 350, 350, 140, 120, 100, 100, 100, 100, 100, 100, 100, 100/*, 100*/});
 
         // Adding headers
         PdfPCell headerCell = new PdfPCell(new Phrase("College\nType"));
@@ -372,9 +372,9 @@ public class CounsellingDataService {
         headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(headerCell);
 
-        headerCell = new PdfPCell(new Phrase("Distance"));
-        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(headerCell);
+//        headerCell = new PdfPCell(new Phrase("Distance"));
+//        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+//        table.addCell(headerCell);
 
         table.setHeaderRows(1);
     }
@@ -386,13 +386,13 @@ public class CounsellingDataService {
         table.addCell(counsellingData.getCategory());
         table.addCell(counsellingData.getGender());
         table.addCell(counsellingData.getQuota());
-        table.addCell(String.valueOf(counsellingData.getOpeningRankAdvance()));
-        table.addCell(String.valueOf(counsellingData.getClosingRankAdvance()));
-        table.addCell(String.valueOf(counsellingData.getOpeningRankMains()));
-        table.addCell(String.valueOf(counsellingData.getClosingRankMains()));
-        table.addCell(String.valueOf(counsellingData.getOpeningRankBArch()));
-        table.addCell(String.valueOf(counsellingData.getClosingRankBArch()));
+        table.addCell(String.valueOf(counsellingData.getOpeningRankAdvance() == -1 ? "-" : counsellingData.getOpeningRankAdvance()));
+        table.addCell(String.valueOf(counsellingData.getClosingRankAdvance() == -1 ? "-" : counsellingData.getClosingRankAdvance()));
+        table.addCell(String.valueOf(counsellingData.getOpeningRankMains() == -1 ? "-" : counsellingData.getOpeningRankMains()));
+        table.addCell(String.valueOf(counsellingData.getClosingRankMains() == -1 ? "-" : counsellingData.getClosingRankMains()));
+        table.addCell(String.valueOf(counsellingData.getOpeningRankBArch() == -1 ? "-" : counsellingData.getOpeningRankBArch()));
+        table.addCell(String.valueOf(counsellingData.getClosingRankBArch() == -1 ? "-" : counsellingData.getClosingRankBArch()));
         table.addCell(String.valueOf(counsellingData.getYear()));
-        table.addCell(String.valueOf(counsellingData.getDistance()));
+//        table.addCell(String.valueOf(counsellingData.getDistance()));
     }
 }

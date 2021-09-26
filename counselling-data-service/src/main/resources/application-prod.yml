@@ -1,6 +1,6 @@
 spring:
   datasource:
     platform: postgres
-    url: jdbc:postgresql://ec2-50-17-255-244.compute-1.amazonaws.com:5432/d426fu743re611
-    username: rduthuwdtilana
-    password: 4f73d50a20c6ca03113793b9477265fccab20349e6e1721484be2509bd1ea357
+    url: jdbc:postgresql://65.1.62.60:5432/counselling-db
+    username: postgres
+    password: counselling@123

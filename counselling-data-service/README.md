@@ -3,7 +3,7 @@ Serves historical yearly counselling data of Indian engineering colleges based o
 
 ### Build project
 ```shell
-gradlew clean build
+gradlew clean build -PprojectVersion=<PROJECT_VERSION>
 ```
 
 ### Start the service

@@ -5,7 +5,13 @@ plugins {
 }
 
 group = 'com.vedantu'
-version = '0.0.1-SNAPSHOT'
+
+if (project.hasProperty('projectVersion')) {
+	version = project.projectVersion
+} else {
+	version = '0.0.1-SNAPSHOT'
+}
+
 
 configurations {
 	compileOnly {
@@ -15,18 +21,6 @@ configurations {
 
 repositories {
 	mavenCentral()
-}
-
-sourceSets {
-	main {
-		java {
-			srcDirs = ['src/main/java']
-		}
-		resources {
-			srcDirs = ['src/main/resources']
-//			destinationDirectory = "$projectDir"
-		}
-	}
 }
 
 dependencies {

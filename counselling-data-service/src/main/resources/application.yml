@@ -1,19 +1,12 @@
 spring:
   datasource:
-    platform: postgres
     type: org.apache.tomcat.jdbc.pool.DataSource
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: "postgres"
-    password: "password"
-  h2:
-    console:
-      enabled: true
   jpa:
     database: POSTGRESQL
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    generate-ddl: true
+    generate-ddl: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         jdbc:
@@ -43,17 +36,6 @@ management:
     jmx:
       exposure:
         include: "health,info"
-
-# Logging
-logging:
-  level:
-    root: WARN
-    org.springframework: INFO
-    org.hibernate.*: ERROR
-    com.zaxxer.hikari.*: ERROR
-    com.vedantu.counselling.data.*: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
 
 # Counselling Data
 data:

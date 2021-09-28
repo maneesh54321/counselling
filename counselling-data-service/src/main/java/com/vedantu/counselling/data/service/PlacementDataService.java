@@ -143,8 +143,8 @@ public class PlacementDataService {
 
     private List<String> ugOrPg(){
         List<String> ugPgList = new ArrayList<>();
-        ugPgList.add("UG");
-        ugPgList.add("PG");
+        ugPgList.add("UG-4 Years");
+        ugPgList.add("UG-5 Years");
         return ugPgList;
     }
 }

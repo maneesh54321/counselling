@@ -305,4 +305,4 @@ CREATE TABLE IF NOT EXISTS public.disclaimer_data
 
 TABLESPACE pg_default;
 
-ALTER TABLE public.summary_data OWNER to postgres;
+ALTER TABLE public.disclaimer_data OWNER to postgres;

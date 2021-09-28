@@ -20,5 +20,6 @@ logging:
     org.hibernate.SQL: INFO
     org.springframework.web.filter.CommonsRequestLoggingFilter: INFO
 
-cors:
-  allowedOrigins: https://vedantu-counselling.herokuapp.com
+# commented below cors configuration to allow all origins, can still be set using jvm args
+#cors:
+#  allowedOrigins: https://vedantu-counselling.herokuapp.com

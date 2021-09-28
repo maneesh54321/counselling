@@ -34,5 +34,8 @@ java -Dspring.profiles.active=local -jar <jarname>
 ```shell
 java -Dspring.profiles.active=prod -Dcors.allowedOrigins=<UI requests allowed origins> -Dlogging.file.name=<LOG_FILE_LOCATION>/counselling-data-service.log -jar <jarname>
 
-e.g. "java -Dspring.profiles.active=prod -Dcors.allowedOrigins=http://localhost:4200 -Dlogging.file.name=/var/tmp/counselling-data-service.log -jar lib/counselling-data-service-1.0.0.jar"
+e.g. "java -Dspring.profiles.active=prod -Dcors.allowedOrigins=http://localhost:4200 -Dlogging.file.name=/var/tmp/counselling-data-service.log -jar lib/counselling-data-service-1.0.0.jar" 
 ```
+Note:
+ - cors.allowedOrigins can be set like -Dcors.allowedOrigins=http://localhost:4200,http://xx.xx.xx.xx:xxxx for multiple allowedOrigins
+ - If not passed, the service will allow all origins

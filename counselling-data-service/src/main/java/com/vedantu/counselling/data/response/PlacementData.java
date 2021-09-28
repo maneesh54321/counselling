@@ -1,6 +1,5 @@
 package com.vedantu.counselling.data.response;
 
-import com.vedantu.counselling.data.model.CollegeBranch;
 import lombok.Builder;
 import lombok.Data;
 

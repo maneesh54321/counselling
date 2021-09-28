@@ -17,4 +17,4 @@ logging:
     org.springframework.web.filter.CommonsRequestLoggingFilter: INFO
 
 cors:
-  allowedOrigins: http://localhost:3000
+  allowedOrigins: http://localhost:4200

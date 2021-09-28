@@ -1,29 +1,29 @@
 package com.vedantu.counselling.data.controller;
 
-import com.vedantu.counselling.data.exception.AuthenticationException;
 import com.vedantu.counselling.data.exception.InvalidInputException;
 import com.vedantu.counselling.data.response.Response;
+import com.vedantu.counselling.data.response.ResponseStatus;
 import com.vedantu.counselling.data.response.SummaryData;
+import com.vedantu.counselling.data.response.view.CityData;
+import com.vedantu.counselling.data.response.view.DownloadedFile;
 import com.vedantu.counselling.data.service.AccessTrackerService;
-import com.vedantu.counselling.data.service.AuthService;
 import com.vedantu.counselling.data.service.CounsellingDataService;
 import com.vedantu.counselling.data.service.DownloadService;
 import com.vedantu.counselling.data.service.SummaryDataService;
 import com.vedantu.counselling.data.util.Utils;
-import com.vedantu.counselling.data.response.ResponseStatus;
-import com.vedantu.counselling.data.response.view.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/landing-page")
 public class SummaryDataController {
 

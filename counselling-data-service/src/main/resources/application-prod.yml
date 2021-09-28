@@ -19,3 +19,6 @@ logging:
     com.vedantu.counselling.data.*: INFO
     org.hibernate.SQL: INFO
     org.springframework.web.filter.CommonsRequestLoggingFilter: INFO
+
+cors:
+  allowedOrigins: https://vedantu-counselling.herokuapp.com

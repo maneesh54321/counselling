@@ -3,10 +3,10 @@ package com.vedantu.counselling.data.controller;
 import com.vedantu.counselling.data.exception.InvalidInputException;
 import com.vedantu.counselling.data.request.CounsellingDataRequest;
 import com.vedantu.counselling.data.response.CounsellingDataResponse;
-import com.vedantu.counselling.data.response.metadata.CounsellingDataMetadata;
 import com.vedantu.counselling.data.response.Response;
-import com.vedantu.counselling.data.service.CounsellingDataService;
 import com.vedantu.counselling.data.response.ResponseStatus;
+import com.vedantu.counselling.data.response.metadata.CounsellingDataMetadata;
+import com.vedantu.counselling.data.service.CounsellingDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -18,7 +18,6 @@ import java.util.Objects;
 
 
 @RestController
-@CrossOrigin
 @RequestMapping("/colleges/ranks")
 public class RankDataController {
 

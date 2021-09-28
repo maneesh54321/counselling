@@ -3,17 +3,16 @@ package com.vedantu.counselling.data.controller;
 import com.vedantu.counselling.data.request.CollegeBranchRequest;
 import com.vedantu.counselling.data.response.CollegeBranchResponse;
 import com.vedantu.counselling.data.response.ListResponse;
-import com.vedantu.counselling.data.service.CollegeBranchDataService;
-import com.vedantu.counselling.data.response.metadata.CollegeBranchMetaData;
 import com.vedantu.counselling.data.response.Response;
 import com.vedantu.counselling.data.response.ResponseStatus;
+import com.vedantu.counselling.data.response.metadata.CollegeBranchMetaData;
+import com.vedantu.counselling.data.service.CollegeBranchDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@CrossOrigin
 @RequestMapping("/colleges/branches")
 public class CollegeBranchDataController {
 

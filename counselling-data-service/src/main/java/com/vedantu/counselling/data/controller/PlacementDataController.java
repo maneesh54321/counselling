@@ -3,10 +3,10 @@ package com.vedantu.counselling.data.controller;
 import com.vedantu.counselling.data.request.PlacementRequest;
 import com.vedantu.counselling.data.response.ListResponse;
 import com.vedantu.counselling.data.response.PlacementData;
-import com.vedantu.counselling.data.service.PlacementDataService;
-import com.vedantu.counselling.data.response.metadata.PlacementMetadata;
 import com.vedantu.counselling.data.response.Response;
 import com.vedantu.counselling.data.response.ResponseStatus;
+import com.vedantu.counselling.data.response.metadata.PlacementMetadata;
+import com.vedantu.counselling.data.service.PlacementDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/colleges/placements")
-@CrossOrigin
 @Slf4j
 public class PlacementDataController {
 

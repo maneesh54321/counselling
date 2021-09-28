@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class SummaryServiceDataMapper {
     public static List<Download> mapDownloads(List<CounsellingDataFile> counsellingDataFiles) {
         return counsellingDataFiles.parallelStream()
-                .map(file -> new Download(file.getId(), file.getDescription()))
+                .map(file -> new Download(file.getId(), file.getName(), file.getDescription()))
                 .collect(Collectors.toList());
     }
 
